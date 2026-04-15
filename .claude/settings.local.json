@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(ls C:/Users/Diego/Development/worldcupnights/next.config*)"
+      "Bash(ls C:/Users/Diego/Development/worldcupnights/next.config*)",
+      "Bash(npx tsc *)",
+      "Bash(timeout 12 npx next build)"
     ]
   }
 }

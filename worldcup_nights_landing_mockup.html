@@ -1,0 +1,301 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500&display=swap');
+  .wcn-wrap { background: #0a0a0a; color: #f0ebe0; font-family: 'DM Sans', sans-serif; min-height: 100vh; overflow: hidden; }
+  .wcn-nav { display: flex; justify-content: space-between; align-items: center; padding: 1.2rem 2rem; border-bottom: 0.5px solid rgba(255,255,255,0.1); }
+  .wcn-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: #FF6B2B; }
+  .wcn-nav-links { display: flex; gap: 1.5rem; font-size: 13px; color: rgba(255,255,255,0.5); }
+  .wcn-nav-cta { background: #FF6B2B; color: #fff; border: none; padding: 8px 18px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 4px; }
+
+  .wcn-hero { position: relative; padding: 5rem 2rem 4rem; text-align: center; overflow: hidden; }
+  .wcn-hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,43,0.18) 0%, transparent 70%); pointer-events: none; }
+  .wcn-eyebrow { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: #FF6B2B; margin-bottom: 1rem; }
+  .wcn-hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 10vw, 90px); line-height: 0.95; color: #f0ebe0; margin: 0 0 0.5rem; }
+  .wcn-hero-title span { color: #FF6B2B; }
+  .wcn-hero-sub { font-size: 15px; color: rgba(240,235,224,0.6); max-width: 440px; margin: 1rem auto 2rem; line-height: 1.6; }
+  .wcn-hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .wcn-btn-primary { background: #FF6B2B; color: #fff; border: none; padding: 14px 28px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 4px; font-weight: 500; }
+  .wcn-btn-ghost { background: transparent; color: #f0ebe0; border: 1px solid rgba(240,235,224,0.3); padding: 14px 28px; font-size: 14px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 4px; }
+  .wcn-badge { display: inline-block; background: rgba(255,107,43,0.15); border: 1px solid rgba(255,107,43,0.3); color: #FF6B2B; font-size: 11px; padding: 4px 12px; border-radius: 20px; margin-top: 2rem; }
+
+  .wcn-divider { height: 0.5px; background: rgba(255,255,255,0.08); margin: 0 2rem; }
+
+  .wcn-section { padding: 3.5rem 2rem; }
+  .wcn-section-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; }
+  .wcn-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #f0ebe0; margin: 0 0 2rem; }
+
+  .wcn-pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+  .wcn-pillar { background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 1.25rem; }
+  .wcn-pillar-icon { font-size: 16px; margin-bottom: 0.75rem; color: #FF6B2B; font-family: 'Bebas Neue', sans-serif; font-size: 22px; }
+  .wcn-pillar-title { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; }
+  .wcn-pillar-body { font-size: 12px; color: rgba(240,235,224,0.5); line-height: 1.5; }
+
+  .wcn-tickets { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .wcn-ticket { border-radius: 10px; padding: 1.75rem; position: relative; overflow: hidden; }
+  .wcn-ticket-entry { background: rgba(255,255,255,0.04); border: 0.5px solid rgba(255,255,255,0.12); }
+  .wcn-ticket-bar { background: #1a0e06; border: 1.5px solid #FF6B2B; }
+  .wcn-ticket-badge { position: absolute; top: 14px; right: 14px; background: #FF6B2B; color: #fff; font-size: 10px; padding: 3px 9px; border-radius: 20px; }
+  .wcn-ticket-name { font-family: 'Bebas Neue', sans-serif; font-size: 26px; margin-bottom: 0.25rem; }
+  .wcn-ticket-price { font-size: 32px; font-weight: 500; color: #FF6B2B; margin-bottom: 1.25rem; }
+  .wcn-ticket-price sup { font-size: 16px; vertical-align: super; }
+  .wcn-ticket-price span { font-size: 14px; color: rgba(240,235,224,0.4); }
+  .wcn-ticket-features { list-style: none; padding: 0; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: 8px; }
+  .wcn-ticket-features li { font-size: 13px; color: rgba(240,235,224,0.7); display: flex; align-items: center; gap: 8px; }
+  .wcn-check { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,107,43,0.2); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .wcn-check::after { content: ''; display: block; width: 5px; height: 5px; background: #FF6B2B; border-radius: 50%; }
+  .wcn-ticket-btn { width: 100%; padding: 12px; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; border-radius: 6px; font-weight: 500; }
+  .wcn-ticket-btn-entry { background: transparent; color: #f0ebe0; border: 0.5px solid rgba(255,255,255,0.25); }
+  .wcn-ticket-btn-bar { background: #FF6B2B; color: #fff; border: none; }
+
+  .wcn-route { display: flex; align-items: flex-start; gap: 0; position: relative; }
+  .wcn-route-stops { display: flex; flex-direction: column; gap: 0; flex: 1; }
+  .wcn-route-stop { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 1.5rem; position: relative; }
+  .wcn-route-stop::before { content: ''; position: absolute; left: 7px; top: 20px; width: 1px; height: calc(100% - 4px); background: rgba(255,107,43,0.25); }
+  .wcn-route-stop:last-child::before { display: none; }
+  .wcn-stop-dot { width: 15px; height: 15px; border-radius: 50%; border: 2px solid #FF6B2B; background: #0a0a0a; flex-shrink: 0; margin-top: 2px; }
+  .wcn-stop-name { font-weight: 500; font-size: 14px; margin-bottom: 3px; }
+  .wcn-stop-desc { font-size: 12px; color: rgba(240,235,224,0.45); }
+
+  .wcn-faq { display: flex; flex-direction: column; gap: 0; }
+  .wcn-faq-item { border-top: 0.5px solid rgba(255,255,255,0.08); padding: 1rem 0; }
+  .wcn-faq-q { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; }
+  .wcn-faq-a { font-size: 13px; color: rgba(240,235,224,0.5); line-height: 1.6; }
+
+  .wcn-footer { padding: 2rem; border-top: 0.5px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .wcn-footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6B2B; letter-spacing: 2px; }
+  .wcn-footer-links { display: flex; gap: 1.5rem; font-size: 12px; color: rgba(255,255,255,0.35); }
+  .wcn-footer-copy { font-size: 11px; color: rgba(255,255,255,0.2); }
+
+  .wcn-lang { display: flex; gap: 8px; align-items: center; font-size: 11px; color: rgba(255,255,255,0.4); }
+  .wcn-lang button { background: none; border: 0.5px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.4); padding: 3px 8px; border-radius: 3px; cursor: pointer; font-size: 11px; font-family: 'DM Sans', sans-serif; }
+  .wcn-lang button.active { border-color: #FF6B2B; color: #FF6B2B; }
+</style>
+
+<div class="wcn-wrap">
+
+  <nav class="wcn-nav">
+    <div class="wcn-logo">WORLD CUP NIGHTS</div>
+    <div class="wcn-nav-links">
+      <span id="nl-exp">The Experience</span>
+      <span id="nl-tix">Tickets</span>
+      <span id="nl-faq">FAQ</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="wcn-lang">
+        <button class="active" onclick="setLang('en')">EN</button>
+        <button onclick="setLang('es')">ES</button>
+      </div>
+      <button class="wcn-nav-cta" id="nav-book">Book Now</button>
+    </div>
+  </nav>
+
+  <section class="wcn-hero">
+    <div class="wcn-hero-bg"></div>
+    <p class="wcn-eyebrow" id="h-eyebrow">Guadalajara · FIFA World Cup 2026</p>
+    <h1 class="wcn-hero-title" id="h-title">THE NIGHT<br>IS <span>YOURS</span></h1>
+    <p class="wcn-hero-sub" id="h-sub">A double-decker party bus rolling through Guadalajara's best streets — with curated music, open bar, local hosts, and a crowd from around the world.</p>
+    <div class="wcn-hero-ctas">
+      <button class="wcn-btn-primary" id="h-cta1">Book Your Spot</button>
+      <button class="wcn-btn-ghost" id="h-cta2">See What's Included</button>
+    </div>
+    <div class="wcn-badge" id="h-badge">⚽ Running every match night during the World Cup</div>
+  </section>
+
+  <div class="wcn-divider"></div>
+
+  <section class="wcn-section">
+    <p class="wcn-section-label" id="s1-label">The Experience</p>
+    <h2 class="wcn-section-title" id="s1-title">NOT JUST A BUS. A MOVING PARTY.</h2>
+    <div class="wcn-pillars">
+      <div class="wcn-pillar">
+        <div class="wcn-pillar-icon">360°</div>
+        <div class="wcn-pillar-title" id="p1-t">Controlled Vibe</div>
+        <div class="wcn-pillar-body" id="p1-b">We curate everything — music, lights, energy. No bad nights.</div>
+      </div>
+      <div class="wcn-pillar">
+        <div class="wcn-pillar-icon">🥃</div>
+        <div class="wcn-pillar-title" id="p2-t">Premium Tequila</div>
+        <div class="wcn-pillar-body" id="p2-b">Open bar option with real Mexican spirits. Not well drinks.</div>
+      </div>
+      <div class="wcn-pillar">
+        <div class="wcn-pillar-icon">🌍</div>
+        <div class="wcn-pillar-title" id="p3-t">Global Crowd</div>
+        <div class="wcn-pillar-body" id="p3-b">Fans from 32+ nations in one electric space. Football energy.</div>
+      </div>
+      <div class="wcn-pillar">
+        <div class="wcn-pillar-icon">🎙</div>
+        <div class="wcn-pillar-title" id="p4-t">Local Hosts</div>
+        <div class="wcn-pillar-body" id="p4-b">Guadalajara locals who know the city and keep the night alive.</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wcn-divider"></div>
+
+  <section class="wcn-section">
+    <p class="wcn-section-label" id="s2-label">Tickets</p>
+    <h2 class="wcn-section-title" id="s2-title">PICK YOUR NIGHT</h2>
+    <div class="wcn-tickets">
+      <div class="wcn-ticket wcn-ticket-entry">
+        <div class="wcn-ticket-name" id="t1-name">ENTRY</div>
+        <div class="wcn-ticket-price"><sup>$</sup>XXX <span>MXN / ~$XX USD</span></div>
+        <ul class="wcn-ticket-features">
+          <li><span class="wcn-check"></span><span id="t1-f1">Bus access all night</span></li>
+          <li><span class="wcn-check"></span><span id="t1-f2">Curated DJ set</span></li>
+          <li><span class="wcn-check"></span><span id="t1-f3">Local host crew</span></li>
+          <li><span class="wcn-check"></span><span id="t1-f4">Drinks available for purchase</span></li>
+        </ul>
+        <button class="wcn-ticket-btn wcn-ticket-btn-entry" id="t1-btn">Reserve Entry Ticket</button>
+      </div>
+      <div class="wcn-ticket wcn-ticket-bar">
+        <div class="wcn-ticket-badge" id="t2-badge">Most Popular</div>
+        <div class="wcn-ticket-name" id="t2-name">OPEN BAR</div>
+        <div class="wcn-ticket-price"><sup>$</sup>XXX <span>MXN / ~$XX USD</span></div>
+        <ul class="wcn-ticket-features">
+          <li><span class="wcn-check"></span><span id="t2-f1">Everything in Entry</span></li>
+          <li><span class="wcn-check"></span><span id="t2-f2">Unlimited premium tequila</span></li>
+          <li><span class="wcn-check"></span><span id="t2-f3">Beer & cocktails included</span></li>
+          <li><span class="wcn-check"></span><span id="t2-f4">Priority boarding</span></li>
+        </ul>
+        <button class="wcn-ticket-btn wcn-ticket-btn-bar" id="t2-btn">Reserve Open Bar</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="wcn-divider"></div>
+
+  <section class="wcn-section">
+    <p class="wcn-section-label" id="s3-label">The Route</p>
+    <h2 class="wcn-section-title" id="s3-title">GUADALAJARA AT NIGHT</h2>
+    <div class="wcn-route-stops">
+      <div class="wcn-route-stop">
+        <div class="wcn-stop-dot"></div>
+        <div><div class="wcn-stop-name" id="r1-n">Zona Rosa / Fan Zone</div><div class="wcn-stop-desc" id="r1-d">Departure point · 9:00 PM — Board up, meet the crew</div></div>
+      </div>
+      <div class="wcn-route-stop">
+        <div class="wcn-stop-dot"></div>
+        <div><div class="wcn-stop-name" id="r2-n">Centro Histórico</div><div class="wcn-stop-desc" id="r2-d">Guadalajara's heart — colonial architecture, live vibe</div></div>
+      </div>
+      <div class="wcn-route-stop">
+        <div class="wcn-stop-dot"></div>
+        <div><div class="wcn-stop-name" id="r3-n">Chapultepec</div><div class="wcn-stop-desc" id="r3-d">The nightlife corridor — see the city from above</div></div>
+      </div>
+      <div class="wcn-route-stop">
+        <div class="wcn-stop-dot"></div>
+        <div><div class="wcn-stop-name" id="r4-n">Final Stop · TBD</div><div class="wcn-stop-desc" id="r4-d">We drop you off at the hottest spot of the night</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wcn-divider"></div>
+
+  <section class="wcn-section">
+    <p class="wcn-section-label" id="s4-label">FAQ</p>
+    <h2 class="wcn-section-title" id="s4-title">NEED TO KNOW</h2>
+    <div class="wcn-faq">
+      <div class="wcn-faq-item">
+        <div class="wcn-faq-q" id="fq1">When does it run?</div>
+        <div class="wcn-faq-a" id="fa1">Every night the World Cup is active in Guadalajara. Exact dates TBD — sign up to get notified.</div>
+      </div>
+      <div class="wcn-faq-item">
+        <div class="wcn-faq-q" id="fq2">Where do we meet?</div>
+        <div class="wcn-faq-a" id="fa2">Boarding point confirmed at time of booking. Typically near the main fan zone.</div>
+      </div>
+      <div class="wcn-faq-item">
+        <div class="wcn-faq-q" id="fq3">Is it safe?</div>
+        <div class="wcn-faq-a" id="fa3">Yes. Our crew is local, experienced, and there with you the entire night. You're in good hands.</div>
+      </div>
+      <div class="wcn-faq-item">
+        <div class="wcn-faq-q" id="fq4">Minimum age?</div>
+        <div class="wcn-faq-a" id="fa4">18+ with valid ID. This is a nightlife experience — no exceptions.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wcn-footer">
+    <div class="wcn-footer-logo">WORLD CUP NIGHTS</div>
+    <div class="wcn-footer-links">
+      <span>Instagram</span>
+      <span>WhatsApp</span>
+      <span>Contact</span>
+    </div>
+    <div class="wcn-footer-copy">© 2026 World Cup Nights · Guadalajara, México</div>
+  </footer>
+
+</div>
+
+<script>
+const copy = {
+  en: {
+    'nav-book': 'Book Now', 'nl-exp': 'The Experience', 'nl-tix': 'Tickets', 'nl-faq': 'FAQ',
+    'h-eyebrow': 'Guadalajara · FIFA World Cup 2026',
+    'h-title': 'THE NIGHT<br>IS <span style="color:#FF6B2B">YOURS</span>',
+    'h-sub': "A double-decker party bus rolling through Guadalajara's best streets — with curated music, open bar, local hosts, and a crowd from around the world.",
+    'h-cta1': 'Book Your Spot', 'h-cta2': "See What's Included",
+    'h-badge': '⚽ Running every match night during the World Cup',
+    's1-label': 'The Experience', 's1-title': 'NOT JUST A BUS. A MOVING PARTY.',
+    'p1-t': 'Controlled Vibe', 'p1-b': 'We curate everything — music, lights, energy. No bad nights.',
+    'p2-t': 'Premium Tequila', 'p2-b': 'Open bar option with real Mexican spirits. Not well drinks.',
+    'p3-t': 'Global Crowd', 'p3-b': 'Fans from 32+ nations in one electric space. Football energy.',
+    'p4-t': 'Local Hosts', 'p4-b': "Guadalajara locals who know the city and keep the night alive.",
+    's2-label': 'Tickets', 's2-title': 'PICK YOUR NIGHT',
+    't1-name': 'ENTRY', 't1-f1': 'Bus access all night', 't1-f2': 'Curated DJ set',
+    't1-f3': 'Local host crew', 't1-f4': 'Drinks available for purchase', 't1-btn': 'Reserve Entry Ticket',
+    't2-badge': 'Most Popular', 't2-name': 'OPEN BAR',
+    't2-f1': 'Everything in Entry', 't2-f2': 'Unlimited premium tequila',
+    't2-f3': 'Beer & cocktails included', 't2-f4': 'Priority boarding', 't2-btn': 'Reserve Open Bar',
+    's3-label': 'The Route', 's3-title': 'GUADALAJARA AT NIGHT',
+    'r1-n': 'Zona Rosa / Fan Zone', 'r1-d': 'Departure point · 9:00 PM — Board up, meet the crew',
+    'r2-n': 'Centro Histórico', 'r2-d': 'Guadalajara\'s heart — colonial architecture, live vibe',
+    'r3-n': 'Chapultepec', 'r3-d': 'The nightlife corridor — see the city from above',
+    'r4-n': 'Final Stop · TBD', 'r4-d': 'We drop you off at the hottest spot of the night',
+    's4-label': 'FAQ', 's4-title': 'NEED TO KNOW',
+    'fq1': 'When does it run?', 'fa1': 'Every night the World Cup is active in Guadalajara. Exact dates TBD — sign up to get notified.',
+    'fq2': 'Where do we meet?', 'fa2': 'Boarding point confirmed at time of booking. Typically near the main fan zone.',
+    'fq3': 'Is it safe?', 'fa3': 'Yes. Our crew is local, experienced, and there with you the entire night. You\'re in good hands.',
+    'fq4': 'Minimum age?', 'fa4': '18+ with valid ID. This is a nightlife experience — no exceptions.'
+  },
+  es: {
+    'nav-book': 'Reservar', 'nl-exp': 'La Experiencia', 'nl-tix': 'Boletos', 'nl-faq': 'Preguntas',
+    'h-eyebrow': 'Guadalajara · Copa Mundial FIFA 2026',
+    'h-title': 'LA NOCHE<br>ES <span style="color:#FF6B2B">TUYA</span>',
+    'h-sub': 'Un camión de dos pisos recorriendo las mejores calles de Guadalajara — con música curada, barra libre, hosts locales y gente de todo el mundo.',
+    'h-cta1': 'Reserva tu lugar', 'h-cta2': '¿Qué incluye?',
+    'h-badge': '⚽ Cada noche de partido durante el Mundial',
+    's1-label': 'La Experiencia', 's1-title': 'NO ES UN CAMIÓN. ES UNA FIESTA QUE SE MUEVE.',
+    'p1-t': 'Ambiente curado', 'p1-b': 'Nosotros controlamos todo — música, luz, energía. Sin noches malas.',
+    'p2-t': 'Tequila premium', 'p2-b': 'Barra libre con auténticos destilados mexicanos. No es cualquier cosa.',
+    'p3-t': 'Crowd global', 'p3-b': 'Fanáticos de más de 32 naciones en un solo espacio. Energía mundialera.',
+    'p4-t': 'Hosts locales', 'p4-b': 'Tapatíos que conocen la ciudad y le dan vida a la noche.',
+    's2-label': 'Boletos', 's2-title': 'ELIGE TU NOCHE',
+    't1-name': 'ENTRADA', 't1-f1': 'Acceso al camión toda la noche', 't1-f2': 'DJ set curado',
+    't1-f3': 'Crew de hosts locales', 't1-f4': 'Bebidas disponibles para comprar', 't1-btn': 'Reservar Entrada',
+    't2-badge': 'Más popular', 't2-name': 'BARRA LIBRE',
+    't2-f1': 'Todo lo de Entrada incluido', 't2-f2': 'Tequila premium ilimitado',
+    't2-f3': 'Cerveza y cócteles incluidos', 't2-f4': 'Abordaje prioritario', 't2-btn': 'Reservar Barra Libre',
+    's3-label': 'La Ruta', 's3-title': 'GUADALAJARA DE NOCHE',
+    'r1-n': 'Zona Rosa / Fan Zone', 'r1-d': 'Punto de salida · 9:00 PM — Sube y conoce al crew',
+    'r2-n': 'Centro Histórico', 'r2-d': 'El corazón de Guadalajara — arquitectura colonial, vibra total',
+    'r3-n': 'Chapultepec', 'r3-d': 'El corredor nocturno — la ciudad desde arriba',
+    'r4-n': 'Parada final · Por definir', 'r4-d': 'Te dejamos en el spot más caliente de la noche',
+    's4-label': 'FAQ', 's4-title': 'LO QUE NECESITAS SABER',
+    'fq1': '¿Cuándo opera?', 'fa1': 'Cada noche que el Mundial esté activo en Guadalajara. Fechas por confirmar — regístrate para recibir notificaciones.',
+    'fq2': '¿Dónde nos encontramos?', 'fa2': 'El punto de abordaje se confirma al hacer tu reserva. Generalmente cerca del fan zone principal.',
+    'fq3': '¿Es seguro?', 'fa3': 'Sí. Nuestro crew es local, con experiencia, y está contigo toda la noche. Estás en buenas manos.',
+    'fq4': '¿Edad mínima?', 'fa4': '+18 con ID válido. Esta es una experiencia nocturna — sin excepciones.'
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.wcn-lang button').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.wcn-lang button:${lang === 'en' ? 'first' : 'last'}-child`).classList.add('active');
+  const d = copy[lang];
+  for (const [id, val] of Object.entries(d)) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+}
+</script>
