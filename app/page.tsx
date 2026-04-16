@@ -13,7 +13,7 @@ const copy = {
     navTix: "Tickets",
     navFaq: "FAQ",
     navBook: "Book Now",
-    eyebrow: "Guadalajara · FIFA World Cup 2026",
+    eyebrow: "Guadalajara · World Cup 2026",
     heroTitle1: "THE NIGHT",
     heroTitle2: "IS",
     heroHighlight: "YOURS",
@@ -81,7 +81,7 @@ const copy = {
     navTix: "Boletos",
     navFaq: "Preguntas",
     navBook: "Reservar",
-    eyebrow: "Guadalajara · Copa Mundial FIFA 2026",
+    eyebrow: "Guadalajara · Mundial 2026",
     heroTitle1: "LA NOCHE",
     heroTitle2: "ES",
     heroHighlight: "TUYA",
@@ -290,9 +290,9 @@ export default function Home() {
         }}
       >
         <span
+          className="text-[15px] md:text-[22px] whitespace-nowrap"
           style={{
             ...heading,
-            fontSize: 22,
             letterSpacing: 2,
             color: "#FF6B2B",
           }}
@@ -300,7 +300,7 @@ export default function Home() {
           WORLD CUP NIGHTS
         </span>
 
-        <div style={{ display: "flex", gap: "1.5rem", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
+        <div className="hidden md:flex" style={{ gap: "1.5rem", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
           <a href="#experience" style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
             {t.navExp}
           </a>
@@ -337,12 +337,11 @@ export default function Home() {
 
           <a
             href="#tickets"
+            className="text-[11px] px-3 py-1.5 md:text-[13px] md:px-[18px] md:py-[8px]"
             style={{
               ...body,
               background: "#FF6B2B",
               color: "#fff",
-              padding: "8px 18px",
-              fontSize: 13,
               cursor: "pointer",
               borderRadius: 4,
               textDecoration: "none",
@@ -378,7 +377,8 @@ export default function Home() {
           priority
           quality={90}
           sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "center" }}
+          className="hero-bus-img"
+          style={{ objectFit: "cover" }}
         />
 
         {/* Dark overlay */}
@@ -386,7 +386,9 @@ export default function Home() {
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to bottom, rgba(10,10,10,0.75) 0%, rgba(10,10,10,0.55) 50%, rgba(10,10,10,0.95) 100%)",
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 100%), " +
+              "linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
             pointerEvents: "none",
           }}
         />
@@ -405,10 +407,9 @@ export default function Home() {
         {/* Content */}
         <div style={{ position: "relative", zIndex: 10 }}>
           <p
+            className="text-[14px] tracking-[0.2em] md:text-[11px] md:tracking-[4px]"
             style={{
               ...body,
-              fontSize: 11,
-              letterSpacing: 4,
               textTransform: "uppercase",
               color: "#FF6B2B",
               marginBottom: "1rem",
@@ -433,13 +434,14 @@ export default function Home() {
           </h1>
 
           <p
+            className="text-[16px] md:text-[15px]"
             style={{
               ...body,
-              fontSize: 15,
-              color: "rgba(240,235,224,0.6)",
+              color: "#ffffff",
               maxWidth: 440,
               margin: "1rem auto 2rem",
               lineHeight: 1.6,
+              textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.9)",
             }}
           >
             {t.heroSub}
@@ -557,7 +559,25 @@ export default function Home() {
         </div>
       </section>
 
-      <Divider />
+      {/* ------------------------------------------------------------------ */}
+      {/* IMAGE BREAK — flags / football                                      */}
+      {/* ------------------------------------------------------------------ */}
+      <div style={{ position: "relative", height: 500, overflow: "hidden" }}>
+        <Image
+          src="/lp-image-2.jpg"
+          alt="World Cup fans with flags"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center 30%" }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.45) 100%)",
+          }}
+        />
+      </div>
 
       {/* ------------------------------------------------------------------ */}
       {/* TICKETS                                                             */}
@@ -710,12 +730,28 @@ export default function Home() {
         </div>
       </section>
 
-      <Divider />
-
       {/* ------------------------------------------------------------------ */}
       {/* ROUTE                                                               */}
       {/* ------------------------------------------------------------------ */}
-      <section id="route" style={{ padding: "3.5rem 2rem" }}>
+      <section id="route" style={{ padding: "3.5rem 2rem", position: "relative", overflow: "hidden", minHeight: 450 }}>
+        <Image
+          src="/lp-image-1.jpg"
+          alt="Guadalajara city at night"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "40% center" }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 100%), " +
+              "linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
+          }}
+        />
+
+        <div style={{ position: "relative", zIndex: 1 }}>
         <p
           style={{
             ...body,
@@ -785,6 +821,7 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </div>{/* end z-index wrapper */}
       </section>
 
       <Divider />
