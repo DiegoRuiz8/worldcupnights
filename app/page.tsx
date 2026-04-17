@@ -36,22 +36,26 @@ const copy = {
     s2Label: "Tickets",
     s2Title: "PICK YOUR NIGHT",
     t1Name: "ENTRY",
+    t1Tagline: "For the ones who want in",
     t1Price: "$35",
     t1PriceSub: "USD / ~$700 MXN",
     t1F1: "Bus access all night",
     t1F2: "Curated DJ set",
     t1F3: "Local host crew",
     t1F4: "Drinks available for purchase",
-    t1Btn: "Reserve Entry Ticket",
+    t1ItalicLine: "Show up, get on, enjoy the night.",
+    t1Btn: "Reserve Entry — $35 USD",
     t2Badge: "Most Popular",
     t2Name: "OPEN BAR",
+    t2Tagline: "For the full experience",
     t2Price: "$55",
     t2PriceSub: "USD / ~$1,100 MXN",
     t2F1: "Everything in Entry",
     t2F2: "Unlimited premium tequila",
     t2F3: "Beer & cocktails included",
     t2F4: "Priority boarding",
-    t2Btn: "Reserve Open Bar",
+    t2ItalicLine: "Zero friction. Full energy. Just drink and enjoy.",
+    t2Btn: "Reserve Open Bar — $55 USD",
     s3Label: "The Route",
     s3Title: "GUADALAJARA AT NIGHT",
     r1Name: "Zona Rosa / Fan Zone",
@@ -64,14 +68,19 @@ const copy = {
     r4Desc: "We drop you off at the hottest spot of the night",
     s4Label: "FAQ",
     s4Title: "NEED TO KNOW",
-    fq1: "When does it run?",
-    fa1: "Every night the World Cup is active in Guadalajara. Exact dates TBD — sign up to get notified.",
-    fq2: "Where do we meet?",
-    fa2: "Boarding point confirmed at time of booking. Typically near the main fan zone.",
-    fq3: "Is it safe?",
-    fa3: "Yes. Our crew is local, experienced, and there with you the entire night. You're in good hands.",
-    fq4: "Minimum age?",
-    fa4: "18+ with valid ID. This is a nightlife experience — no exceptions.",
+    faq: [
+      { q: "When does it run?", a: "June 5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26 and 27. One departure per night at 9:00 PM from Plaza Liberación, Centro Histórico." },
+      { q: "Where do we meet?", a: "Fan Fest at Plaza Liberación, Centro Histórico, Guadalajara. We recommend arriving 15 minutes early. Exact boarding instructions sent after booking." },
+      { q: "Can I come alone?", a: "Absolutely. Most people do. The experience is designed to connect people — you will not feel out of place." },
+      { q: "Is it good if I don't speak Spanish?", a: "Yes. Our hosts are bilingual (English/Spanish) and the crowd is international. No Spanish needed." },
+      { q: "How long is the experience?", a: "Approximately 3 hours. Departure at 9:00 PM, ending around midnight at a final nightlife spot in the city." },
+      { q: "How many people fit on the bus?", a: "Maximum 40 people per night. We keep it intentionally small for a better social experience." },
+      { q: "Can I change my date?", a: "Yes — free date change up to 48 hours before your selected night. No refunds." },
+      { q: "Is it safe?", a: "Yes. Bilingual local hosts are with you the entire night, the route is curated through safe areas of the city, and capacity is limited so the group stays together." },
+      { q: "Is it safe for women attending alone?", a: "Yes. We have a strict code of conduct, mixed groups, and hosts present at all times. Many solo female travelers choose this experience specifically because it removes the uncertainty of navigating nightlife alone." },
+      { q: "What is the dress code?", a: "No formal dress code. Come as you are — football jersey, casual, or dressed up. The vibe is energetic but relaxed." },
+      { q: "Minimum age?", a: "18+ with valid ID. No exceptions." },
+    ],
     footerInstagram: "Instagram",
     footerWhatsApp: "WhatsApp",
     footerContact: "Contact",
@@ -104,22 +113,26 @@ const copy = {
     s2Label: "Boletos",
     s2Title: "ELIGE TU NOCHE",
     t1Name: "ENTRADA",
+    t1Tagline: "Para los que quieren estar ahí",
     t1Price: "$700",
     t1PriceSub: "MXN / ~$35 USD",
     t1F1: "Acceso al camión toda la noche",
     t1F2: "DJ set curado",
     t1F3: "Crew de hosts locales",
     t1F4: "Bebidas disponibles para comprar",
-    t1Btn: "Reservar Entrada",
+    t1ItalicLine: "Súbete, disfruta la noche.",
+    t1Btn: "Reservar Entrada — $700 MXN",
     t2Badge: "Más popular",
     t2Name: "BARRA LIBRE",
+    t2Tagline: "Para la experiencia completa",
     t2Price: "$1,100",
     t2PriceSub: "MXN / ~$55 USD",
     t2F1: "Todo lo de Entrada incluido",
     t2F2: "Tequila premium ilimitado",
     t2F3: "Cerveza y cócteles incluidos",
     t2F4: "Abordaje prioritario",
-    t2Btn: "Reservar Barra Libre",
+    t2ItalicLine: "Sin fricciones. Energía total. Solo disfruta.",
+    t2Btn: "Reservar Barra Libre — $1,100 MXN",
     s3Label: "La Ruta",
     s3Title: "GUADALAJARA DE NOCHE",
     r1Name: "Zona Rosa / Fan Zone",
@@ -132,14 +145,19 @@ const copy = {
     r4Desc: "Te dejamos en el spot más caliente de la noche",
     s4Label: "FAQ",
     s4Title: "LO QUE NECESITAS SABER",
-    fq1: "¿Cuándo opera?",
-    fa1: "Cada noche que el Mundial esté activo en Guadalajara. Fechas por confirmar — regístrate para recibir notificaciones.",
-    fq2: "¿Dónde nos encontramos?",
-    fa2: "El punto de abordaje se confirma al hacer tu reserva. Generalmente cerca del fan zone principal.",
-    fq3: "¿Es seguro?",
-    fa3: "Sí. Nuestro crew es local, con experiencia, y está contigo toda la noche. Estás en buenas manos.",
-    fq4: "¿Edad mínima?",
-    fa4: "+18 con ID válido. Esta es una experiencia nocturna — sin excepciones.",
+    faq: [
+      { q: "¿Cuándo opera?", a: "5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26 y 27 de junio. Una salida por noche a las 9:00 PM desde Plaza Liberación, Centro Histórico." },
+      { q: "¿Dónde nos encontramos?", a: "Fan Fest en Plaza Liberación, Centro Histórico, Guadalajara. Recomendamos llegar 15 minutos antes. Las instrucciones exactas de abordaje se envían después de reservar." },
+      { q: "¿Puedo ir solo/a?", a: "Claro que sí. La mayoría lo hace. La experiencia está diseñada para conectar personas — no te vas a sentir fuera de lugar." },
+      { q: "¿Funciona si no hablo español?", a: "Sí. Nuestros hosts son bilingües (inglés/español) y el grupo es internacional. No necesitas español." },
+      { q: "¿Cuánto dura la experiencia?", a: "Aproximadamente 3 horas. Salida a las 9:00 PM, terminando alrededor de medianoche en un spot final de la ciudad." },
+      { q: "¿Cuántas personas caben en el camión?", a: "Máximo 40 personas por noche. Lo mantenemos pequeño intencionalmente para una mejor experiencia social." },
+      { q: "¿Puedo cambiar mi fecha?", a: "Sí — cambio de fecha gratis hasta 48 horas antes de tu noche seleccionada. Sin reembolsos." },
+      { q: "¿Es seguro?", a: "Sí. Hosts locales bilingües están contigo toda la noche, la ruta pasa por zonas seguras de la ciudad y el cupo es limitado para que el grupo permanezca unido." },
+      { q: "¿Es seguro para mujeres que van solas?", a: "Sí. Tenemos un código de conducta estricto, grupos mixtos y hosts presentes en todo momento. Muchas viajeras solo eligen esta experiencia precisamente porque elimina la incertidumbre de salir solas en una ciudad desconocida." },
+      { q: "¿Hay código de vestimenta?", a: "No. Ven como quieras — jersey de fútbol, casual o arreglado. El ambiente es energético pero relajado." },
+      { q: "¿Edad mínima?", a: "18+ con identificación válida. Sin excepciones." },
+    ],
     footerInstagram: "Instagram",
     footerWhatsApp: "WhatsApp",
     footerContact: "Contacto",
@@ -673,8 +691,18 @@ export default function Home() {
               border: "0.5px solid rgba(255,255,255,0.12)",
             }}
           >
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>
+            <div style={{ ...heading, fontSize: 26, marginBottom: "0.1rem" }}>
               {t.t1Name}
+            </div>
+            <div
+              style={{
+                ...body,
+                fontSize: 14,
+                color: "rgba(255,255,255,0.6)",
+                marginBottom: "0.75rem",
+              }}
+            >
+              {t.t1Tagline}
             </div>
             <div
               style={{
@@ -717,6 +745,17 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+            <div
+              style={{
+                ...body,
+                fontSize: 12,
+                fontStyle: "italic",
+                color: "rgba(255,255,255,0.4)",
+                marginBottom: "1rem",
+              }}
+            >
+              {t.t1ItalicLine}
+            </div>
             <button
               onClick={() => {
                 if (!selectedDate) {
@@ -769,8 +808,18 @@ export default function Home() {
             >
               {t.t2Badge}
             </div>
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>
+            <div style={{ ...heading, fontSize: 26, marginBottom: "0.1rem" }}>
               {t.t2Name}
+            </div>
+            <div
+              style={{
+                ...body,
+                fontSize: 14,
+                color: "rgba(255,255,255,0.6)",
+                marginBottom: "0.75rem",
+              }}
+            >
+              {t.t2Tagline}
             </div>
             <div
               style={{
@@ -813,6 +862,17 @@ export default function Home() {
                 </li>
               ))}
             </ul>
+            <div
+              style={{
+                ...body,
+                fontSize: 12,
+                fontStyle: "italic",
+                color: "rgba(255,255,255,0.4)",
+                marginBottom: "1rem",
+              }}
+            >
+              {t.t2ItalicLine}
+            </div>
             <button
               onClick={() => {
                 if (!selectedDate) {
@@ -1095,12 +1155,7 @@ export default function Home() {
         </h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {[
-            { q: t.fq1, a: t.fa1 },
-            { q: t.fq2, a: t.fa2 },
-            { q: t.fq3, a: t.fa3 },
-            { q: t.fq4, a: t.fa4 },
-          ].map((item) => (
+          {t.faq.map((item) => (
             <div
               key={item.q}
               style={{
@@ -1136,6 +1191,46 @@ export default function Home() {
       {/* ------------------------------------------------------------------ */}
       {/* FOOTER                                                              */}
       {/* ------------------------------------------------------------------ */}
+      {/* ------------------------------------------------------------------ */}
+      {/* TRUST BAR                                                           */}
+      {/* ------------------------------------------------------------------ */}
+      <div
+        style={{
+          borderTop: "0.5px solid rgba(255,255,255,0.1)",
+          padding: "1.5rem 2rem",
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: "2rem",
+        }}
+      >
+        {(lang === "en"
+          ? [
+              "✓ Secure checkout via MercadoPago",
+              "✓ Bilingual hosts · EN/ES",
+              "✓ Max 40 seats per night",
+              "✓ Free date change · 48hrs notice",
+            ]
+          : [
+              "✓ Pago seguro con MercadoPago",
+              "✓ Hosts bilingües · EN/ES",
+              "✓ Máx 40 lugares por noche",
+              "✓ Cambio de fecha gratis · 48hrs de aviso",
+            ]
+        ).map((item) => (
+          <span
+            key={item}
+            style={{
+              ...body,
+              fontSize: 12,
+              color: "rgba(255,255,255,0.5)",
+            }}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+
       <footer
         style={{
           padding: "2rem",
@@ -1166,7 +1261,14 @@ export default function Home() {
           }}
         >
           <span style={{ cursor: "pointer" }}>{t.footerInstagram}</span>
-          <span style={{ cursor: "pointer" }}>{t.footerWhatsApp}</span>
+          <a
+            href="https://wa.me/52XXXXXXXXXX"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}
+          >
+            {t.footerWhatsApp}
+          </a>
           <span style={{ cursor: "pointer" }}>{t.footerContact}</span>
         </div>
         <div style={{ ...body, fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
