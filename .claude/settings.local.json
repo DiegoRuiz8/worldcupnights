@@ -3,7 +3,8 @@
     "allow": [
       "Bash(ls C:/Users/Diego/Development/worldcupnights/next.config*)",
       "Bash(npx tsc *)",
-      "Bash(timeout 12 npx next build)"
+      "Bash(timeout 12 npx next build)",
+      "Bash(npm run *)"
     ]
   }
 }

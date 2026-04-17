@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import DateSelector from "./components/DateSelector";
 
 // ---------------------------------------------------------------------------
 // Copy
@@ -13,25 +14,25 @@ const copy = {
     navTix: "Tickets",
     navFaq: "FAQ",
     navBook: "Book Now",
-    eyebrow: "Guadalajara · World Cup 2026",
-    heroTitle1: "THE NIGHT",
-    heroTitle2: "IS",
-    heroHighlight: "YOURS",
+    eyebrow: "Guadalajara · 15 Match Nights · June 2026",
+    heroTitle1: "GUADALAJARA'S",
+    heroTitle2: "WILDEST",
+    heroHighlight: "WORLD CUP NIGHT",
     heroSub:
-      "A double-decker party bus rolling through Guadalajara's best streets — with curated music, open bar, local hosts, and a crowd from around the world.",
-    heroCta1: "Book Your Spot",
+      "A curated double-decker party bus for fans, travelers, and locals who want more than just another bar. Music, premium drinks, local hosts — one unforgettable night.",
+    heroCta1: "Choose Your Night",
     heroCta2: "See What's Included",
-    heroBadge: "⚽ Running every match night during the World Cup",
+    heroBadge: "⚽ Limited to 40 seats per night · June 2026",
     s1Label: "The Experience",
     s1Title: "NOT JUST A BUS. A MOVING PARTY.",
-    p1Title: "Controlled Vibe",
-    p1Body: "We curate everything — music, lights, energy. No bad nights.",
-    p2Title: "Premium Tequila",
-    p2Body: "Open bar option with real Mexican spirits. Not well drinks.",
-    p3Title: "Global Crowd",
-    p3Body: "Fans from 32+ nations in one electric space. Football energy.",
-    p4Title: "Local Hosts",
-    p4Body: "Guadalajara locals who know the city and keep the night alive.",
+    p1Title: "No Random Crowd",
+    p1Body: "We cap every night at 40 people. Curated group, better energy, better connections.",
+    p2Title: "Real Mexican Spirits",
+    p2Body: "Not well drinks. Actual premium tequila and mezcal. Open bar means open bar.",
+    p3Title: "Never Feel Lost",
+    p3Body: "Bilingual local hosts from start to finish. They know the city, the spots, and how to keep the night alive.",
+    p4Title: "The Best of the City",
+    p4Body: "Centro Histórico, Chapultepec, Fan Zone — iconic Guadalajara nightlife in one night, no planning needed.",
     s2Label: "Tickets",
     s2Title: "PICK YOUR NIGHT",
     t1Name: "ENTRY",
@@ -81,25 +82,25 @@ const copy = {
     navTix: "Boletos",
     navFaq: "Preguntas",
     navBook: "Reservar",
-    eyebrow: "Guadalajara · Mundial 2026",
+    eyebrow: "Guadalajara · 15 Noches · Junio 2026",
     heroTitle1: "LA NOCHE",
-    heroTitle2: "ES",
-    heroHighlight: "TUYA",
+    heroTitle2: "MÁS",
+    heroHighlight: "ÉPICA DEL MUNDIAL",
     heroSub:
-      "Un camión de dos pisos recorriendo las mejores calles de Guadalajara — con música curada, barra libre, hosts locales y gente de todo el mundo.",
-    heroCta1: "Reserva tu lugar",
+      "Un camión de dos pisos curado para fans, viajeros y locales que quieren más que una noche normal. Música, tequila premium, hosts locales — una noche que no vas a olvidar.",
+    heroCta1: "Elige Tu Noche",
     heroCta2: "¿Qué incluye?",
-    heroBadge: "⚽ Cada noche de partido durante el Mundial",
+    heroBadge: "⚽ Solo 40 lugares por noche · Junio 2026",
     s1Label: "La Experiencia",
     s1Title: "NO ES UN CAMIÓN. ES UNA FIESTA QUE SE MUEVE.",
-    p1Title: "Ambiente curado",
-    p1Body: "Nosotros controlamos todo — música, luz, energía. Sin noches malas.",
-    p2Title: "Tequila premium",
-    p2Body: "Barra libre con auténticos destilados mexicanos. No es cualquier cosa.",
-    p3Title: "Crowd global",
-    p3Body: "Fanáticos de más de 32 naciones en un solo espacio. Energía mundialera.",
-    p4Title: "Hosts locales",
-    p4Body: "Tapatíos que conocen la ciudad y le dan vida a la noche.",
+    p1Title: "Sin Crowd Aleatorio",
+    p1Body: "Máximo 40 personas por noche. Grupo curado, mejor energía, mejores conexiones.",
+    p2Title: "Spirits Mexicanos Reales",
+    p2Body: "No es alcohol de mala calidad. Tequila y mezcal premium de verdad. Barra libre significa barra libre.",
+    p3Title: "Nunca Te Pierdes",
+    p3Body: "Hosts locales bilingües de principio a fin. Conocen la ciudad, los spots y cómo mantener la noche viva.",
+    p4Title: "Lo Mejor de la Ciudad",
+    p4Body: "Centro Histórico, Chapultepec, Fan Zone — lo mejor de Guadalajara en una sola noche, sin planear nada.",
     s2Label: "Boletos",
     s2Title: "ELIGE TU NOCHE",
     t1Name: "ENTRADA",
@@ -148,7 +149,6 @@ const copy = {
 
 type Lang = keyof typeof copy;
 
-
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
@@ -194,19 +194,42 @@ function Divider() {
 
 function IconSliders() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B2B" strokeWidth="1.5" strokeLinecap="round">
-      <line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" />
-      <line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" />
-      <line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" />
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FF6B2B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    >
+      <line x1="4" y1="21" x2="4" y2="14" />
+      <line x1="4" y1="10" x2="4" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12" y2="3" />
+      <line x1="20" y1="21" x2="20" y2="16" />
+      <line x1="20" y1="12" x2="20" y2="3" />
+      <line x1="1" y1="14" x2="7" y2="14" />
+      <line x1="9" y1="8" x2="15" y2="8" />
+      <line x1="17" y1="16" x2="23" y2="16" />
     </svg>
   );
 }
 
 function IconGlass() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B2B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M8 22h8" /><line x1="12" y1="11" x2="12" y2="22" />
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FF6B2B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M8 22h8" />
+      <line x1="12" y1="11" x2="12" y2="22" />
       <path d="M5 3l2 7c.6 2 2.2 3.2 5 3.2s4.4-1.2 5-3.2L19 3H5z" />
     </svg>
   );
@@ -214,7 +237,16 @@ function IconGlass() {
 
 function IconGlobe() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B2B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FF6B2B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <circle cx="12" cy="12" r="10" />
       <line x1="2" y1="12" x2="22" y2="12" />
       <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -224,10 +256,20 @@ function IconGlobe() {
 
 function IconMic() {
   return (
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF6B2B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="#FF6B2B"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
       <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
       <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-      <line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
+      <line x1="12" y1="19" x2="12" y2="23" />
+      <line x1="8" y1="23" x2="16" y2="23" />
     </svg>
   );
 }
@@ -238,7 +280,10 @@ function IconMic() {
 
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
-  const [loadingTier, setLoadingTier] = useState<"entry" | "open-bar" | null>(null);
+  const [loadingTier, setLoadingTier] = useState<"entry" | "open-bar" | null>(
+    null,
+  );
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const t = copy[lang];
 
   useEffect(() => {
@@ -247,13 +292,13 @@ export default function Home() {
     return () => window.removeEventListener("pageshow", reset);
   }, []);
 
-  async function handleCheckout(tier: "entry" | "open-bar") {
+  async function handleCheckout(tier: "entry" | "open-bar", date: string) {
     setLoadingTier(tier);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ticketType: tier, quantity: 1 }),
+        body: JSON.stringify({ ticketType: tier, quantity: 1, date }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Checkout failed");
@@ -300,21 +345,57 @@ export default function Home() {
           WORLD CUP NIGHTS
         </span>
 
-        <div className="hidden md:flex" style={{ gap: "1.5rem", fontSize: 13, color: "rgba(255,255,255,0.5)" }}>
-          <a href="#experience" style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
+        <div
+          className="hidden md:flex"
+          style={{
+            gap: "1.5rem",
+            fontSize: 13,
+            color: "rgba(255,255,255,0.5)",
+          }}
+        >
+          <a
+            href="#experience"
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+              cursor: "pointer",
+            }}
+          >
             {t.navExp}
           </a>
-          <a href="#tickets" style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
+          <a
+            href="#tickets"
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+              cursor: "pointer",
+            }}
+          >
             {t.navTix}
           </a>
-          <a href="#faq" style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}>
+          <a
+            href="#faq"
+            style={{
+              color: "inherit",
+              textDecoration: "none",
+              cursor: "pointer",
+            }}
+          >
             {t.navFaq}
           </a>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           {/* Language switcher */}
-          <div style={{ display: "flex", gap: 8, alignItems: "center", fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              alignItems: "center",
+              fontSize: 11,
+              color: "rgba(255,255,255,0.4)",
+            }}
+          >
             {(["en", "es"] as Lang[]).map((l) => (
               <button
                 key={l}
@@ -336,7 +417,7 @@ export default function Home() {
           </div>
 
           <a
-            href="#tickets"
+            href="#dates"
             className="text-[11px] px-3 py-1.5 md:text-[13px] md:px-[18px] md:py-[8px]"
             style={{
               ...body,
@@ -441,15 +522,23 @@ export default function Home() {
               maxWidth: 440,
               margin: "1rem auto 2rem",
               lineHeight: 1.6,
-              textShadow: "0 2px 12px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.9)",
+              textShadow:
+                "0 2px 12px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.9)",
             }}
           >
             {t.heroSub}
           </p>
 
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              justifyContent: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <a
-              href="#tickets"
+              href="#dates"
               style={{
                 ...body,
                 background: "#FF6B2B",
@@ -501,88 +590,48 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ------------------------------------------------------------------ */}
+      {/* URGENCY STRIP                                                       */}
+      {/* ------------------------------------------------------------------ */}
+      <div
+        style={{
+          background: "#FF6B2B",
+          padding: "0.75rem 2rem",
+          textAlign: "center",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--font-bebas)",
+            fontSize: 15,
+            letterSpacing: "0.08em",
+            color: "#000",
+            fontWeight: 500,
+          }}
+        >
+          {lang === "en"
+            ? "🔥 15 match nights · 40 seats max per night · Prices increase closer to match dates"
+            : "🔥 15 noches de partido · Máximo 40 lugares por noche · Precios suben conforme se acercan las fechas"}
+        </span>
+      </div>
+
       <Divider />
 
       {/* ------------------------------------------------------------------ */}
-      {/* EXPERIENCE PILLARS                                                  */}
+      {/* DATES                                                               */}
       {/* ------------------------------------------------------------------ */}
-      <section id="experience" style={{ padding: "3.5rem 2rem" }}>
-        <p
-          style={{
-            ...body,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.35)",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {t.s1Label}
-        </p>
-        <h2 style={{ ...heading, fontSize: 36, color: "#f0ebe0", margin: "0 0 2rem" }}>
-          {t.s1Title}
-        </h2>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 12,
-          }}
-        >
-          {[
-            { icon: <IconSliders />, title: t.p1Title, body: t.p1Body },
-            { icon: <IconGlass />,   title: t.p2Title, body: t.p2Body },
-            { icon: <IconGlobe />,   title: t.p3Title, body: t.p3Body },
-            { icon: <IconMic />,     title: t.p4Title, body: t.p4Body },
-          ].map((pillar) => (
-            <div
-              key={pillar.title}
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "0.5px solid rgba(255,255,255,0.1)",
-                borderRadius: 8,
-                padding: "1.25rem",
-              }}
-            >
-              <div style={{ marginBottom: "0.75rem", lineHeight: 1 }}>
-                {pillar.icon}
-              </div>
-              <div style={{ ...body, fontSize: 14, fontWeight: 500, marginBottom: "0.4rem" }}>
-                {pillar.title}
-              </div>
-              <div style={{ ...body, fontSize: 12, color: "rgba(240,235,224,0.5)", lineHeight: 1.5 }}>
-                {pillar.body}
-              </div>
-            </div>
-          ))}
-        </div>
+      <section id="dates" style={{ background: "#0a0a0a" }}>
+        <DateSelector
+          lang={lang}
+          selectedDate={selectedDate}
+          onSelect={setSelectedDate}
+        />
       </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* IMAGE BREAK — flags / football                                      */}
-      {/* ------------------------------------------------------------------ */}
-      <div style={{ position: "relative", height: 500, overflow: "hidden" }}>
-        <Image
-          src="/lp-image-2.jpg"
-          alt="World Cup fans with flags"
-          fill
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "center 30%" }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.45) 100%)",
-          }}
-        />
-      </div>
 
       {/* ------------------------------------------------------------------ */}
       {/* TICKETS                                                             */}
       {/* ------------------------------------------------------------------ */}
-      <section id="tickets" style={{ padding: "3.5rem 2rem" }}>
+      <section id="tickets" style={{ padding: "1rem 2rem 3.5rem" }}>
         <p
           style={{
             ...body,
@@ -595,7 +644,14 @@ export default function Home() {
         >
           {t.s2Label}
         </p>
-        <h2 style={{ ...heading, fontSize: 36, color: "#f0ebe0", margin: "0 0 2rem" }}>
+        <h2
+          style={{
+            ...heading,
+            fontSize: 36,
+            color: "#f0ebe0",
+            margin: "0 0 2rem",
+          }}
+        >
           {t.s2Title}
         </h2>
 
@@ -617,10 +673,22 @@ export default function Home() {
               border: "0.5px solid rgba(255,255,255,0.12)",
             }}
           >
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>{t.t1Name}</div>
-            <div style={{ ...body, fontSize: 32, fontWeight: 500, color: "#FF6B2B", marginBottom: "1.25rem" }}>
+            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>
+              {t.t1Name}
+            </div>
+            <div
+              style={{
+                ...body,
+                fontSize: 32,
+                fontWeight: 500,
+                color: "#FF6B2B",
+                marginBottom: "1.25rem",
+              }}
+            >
               {t.t1Price}{" "}
-              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>{t.t1PriceSub}</span>
+              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>
+                {t.t1PriceSub}
+              </span>
             </div>
             <ul
               style={{
@@ -633,14 +701,30 @@ export default function Home() {
               }}
             >
               {[t.t1F1, t.t1F2, t.t1F3, t.t1F4].map((feat) => (
-                <li key={feat} style={{ ...body, fontSize: 13, color: "rgba(240,235,224,0.7)", display: "flex", alignItems: "center", gap: 8 }}>
+                <li
+                  key={feat}
+                  style={{
+                    ...body,
+                    fontSize: 13,
+                    color: "rgba(240,235,224,0.7)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
                   <CheckDot />
                   {feat}
                 </li>
               ))}
             </ul>
             <button
-              onClick={() => handleCheckout("entry")}
+              onClick={() => {
+                if (!selectedDate) {
+                  alert(lang === "en" ? "Please select a date first" : "Primero elige una fecha");
+                  return;
+                }
+                handleCheckout("entry", selectedDate);
+              }}
               disabled={loadingTier !== null}
               style={{
                 ...body,
@@ -685,10 +769,22 @@ export default function Home() {
             >
               {t.t2Badge}
             </div>
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>{t.t2Name}</div>
-            <div style={{ ...body, fontSize: 32, fontWeight: 500, color: "#FF6B2B", marginBottom: "1.25rem" }}>
+            <div style={{ ...heading, fontSize: 26, marginBottom: "0.25rem" }}>
+              {t.t2Name}
+            </div>
+            <div
+              style={{
+                ...body,
+                fontSize: 32,
+                fontWeight: 500,
+                color: "#FF6B2B",
+                marginBottom: "1.25rem",
+              }}
+            >
               {t.t2Price}{" "}
-              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>{t.t2PriceSub}</span>
+              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>
+                {t.t2PriceSub}
+              </span>
             </div>
             <ul
               style={{
@@ -701,14 +797,30 @@ export default function Home() {
               }}
             >
               {[t.t2F1, t.t2F2, t.t2F3, t.t2F4].map((feat) => (
-                <li key={feat} style={{ ...body, fontSize: 13, color: "rgba(240,235,224,0.7)", display: "flex", alignItems: "center", gap: 8 }}>
+                <li
+                  key={feat}
+                  style={{
+                    ...body,
+                    fontSize: 13,
+                    color: "rgba(240,235,224,0.7)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
                   <CheckDot />
                   {feat}
                 </li>
               ))}
             </ul>
             <button
-              onClick={() => handleCheckout("open-bar")}
+              onClick={() => {
+                if (!selectedDate) {
+                  alert(lang === "en" ? "Please select a date first" : "Primero elige una fecha");
+                  return;
+                }
+                handleCheckout("open-bar", selectedDate);
+              }}
               disabled={loadingTier !== null}
               style={{
                 ...body,
@@ -730,10 +842,118 @@ export default function Home() {
         </div>
       </section>
 
+      <Divider />
+
+      {/* ------------------------------------------------------------------ */}
+      {/* IMAGE BREAK — flags / football                                      */}
+      {/* ------------------------------------------------------------------ */}
+      <div style={{ position: "relative", height: 500, overflow: "hidden" }}>
+        <Image
+          src="/lp-image-2.jpg"
+          alt="World Cup fans with flags"
+          fill
+          sizes="100vw"
+          style={{ objectFit: "cover", objectPosition: "center 30%" }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.45) 100%)",
+          }}
+        />
+      </div>
+
+      {/* ------------------------------------------------------------------ */}
+      {/* EXPERIENCE PILLARS                                                  */}
+      {/* ------------------------------------------------------------------ */}
+      <section id="experience" style={{ padding: "3.5rem 2rem" }}>
+        <p
+          style={{
+            ...body,
+            fontSize: 11,
+            letterSpacing: 3,
+            textTransform: "uppercase",
+            color: "rgba(255,255,255,0.35)",
+            marginBottom: "0.5rem",
+          }}
+        >
+          {t.s1Label}
+        </p>
+        <h2
+          style={{
+            ...heading,
+            fontSize: 36,
+            color: "#f0ebe0",
+            margin: "0 0 2rem",
+          }}
+        >
+          {t.s1Title}
+        </h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+            gap: 12,
+          }}
+        >
+          {[
+            { icon: <IconSliders />, title: t.p1Title, body: t.p1Body },
+            { icon: <IconGlass />, title: t.p2Title, body: t.p2Body },
+            { icon: <IconGlobe />, title: t.p3Title, body: t.p3Body },
+            { icon: <IconMic />, title: t.p4Title, body: t.p4Body },
+          ].map((pillar) => (
+            <div
+              key={pillar.title}
+              style={{
+                background: "rgba(255,255,255,0.04)",
+                border: "0.5px solid rgba(255,255,255,0.1)",
+                borderRadius: 8,
+                padding: "1.25rem",
+              }}
+            >
+              <div style={{ marginBottom: "0.75rem", lineHeight: 1 }}>
+                {pillar.icon}
+              </div>
+              <div
+                style={{
+                  ...body,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  marginBottom: "0.4rem",
+                }}
+              >
+                {pillar.title}
+              </div>
+              <div
+                style={{
+                  ...body,
+                  fontSize: 12,
+                  color: "rgba(240,235,224,0.5)",
+                  lineHeight: 1.5,
+                }}
+              >
+                {pillar.body}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ------------------------------------------------------------------ */}
       {/* ROUTE                                                               */}
       {/* ------------------------------------------------------------------ */}
-      <section id="route" style={{ padding: "3.5rem 2rem", position: "relative", overflow: "hidden", minHeight: 450 }}>
+      <section
+        id="route"
+        style={{
+          padding: "3.5rem 2rem",
+          position: "relative",
+          overflow: "hidden",
+          minHeight: 450,
+        }}
+      >
         <Image
           src="/lp-image-1.jpg"
           alt="Guadalajara city at night"
@@ -752,76 +972,97 @@ export default function Home() {
         />
 
         <div style={{ position: "relative", zIndex: 1 }}>
-        <p
-          style={{
-            ...body,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.35)",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {t.s3Label}
-        </p>
-        <h2 style={{ ...heading, fontSize: 36, color: "#f0ebe0", margin: "0 0 2rem" }}>
-          {t.s3Title}
-        </h2>
+          <p
+            style={{
+              ...body,
+              fontSize: 11,
+              letterSpacing: 3,
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.35)",
+              marginBottom: "0.5rem",
+            }}
+          >
+            {t.s3Label}
+          </p>
+          <h2
+            style={{
+              ...heading,
+              fontSize: 36,
+              color: "#f0ebe0",
+              margin: "0 0 2rem",
+            }}
+          >
+            {t.s3Title}
+          </h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {[
-            { name: t.r1Name, desc: t.r1Desc },
-            { name: t.r2Name, desc: t.r2Desc },
-            { name: t.r3Name, desc: t.r3Desc },
-            { name: t.r4Name, desc: t.r4Desc },
-          ].map((stop, i, arr) => (
-            <div
-              key={stop.name}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 16,
-                paddingBottom: "1.5rem",
-                position: "relative",
-              }}
-            >
-              {/* Vertical line except for last item */}
-              {i < arr.length - 1 && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+            {[
+              { name: t.r1Name, desc: t.r1Desc },
+              { name: t.r2Name, desc: t.r2Desc },
+              { name: t.r3Name, desc: t.r3Desc },
+              { name: t.r4Name, desc: t.r4Desc },
+            ].map((stop, i, arr) => (
+              <div
+                key={stop.name}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 16,
+                  paddingBottom: "1.5rem",
+                  position: "relative",
+                }}
+              >
+                {/* Vertical line except for last item */}
+                {i < arr.length - 1 && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 7,
+                      top: 20,
+                      width: 1,
+                      height: "calc(100% - 4px)",
+                      background: "rgba(255,107,43,0.25)",
+                    }}
+                  />
+                )}
+                {/* Dot */}
                 <div
                   style={{
-                    position: "absolute",
-                    left: 7,
-                    top: 20,
-                    width: 1,
-                    height: "calc(100% - 4px)",
-                    background: "rgba(255,107,43,0.25)",
+                    width: 15,
+                    height: 15,
+                    borderRadius: "50%",
+                    border: "2px solid #FF6B2B",
+                    background: "#0a0a0a",
+                    flexShrink: 0,
+                    marginTop: 2,
                   }}
                 />
-              )}
-              {/* Dot */}
-              <div
-                style={{
-                  width: 15,
-                  height: 15,
-                  borderRadius: "50%",
-                  border: "2px solid #FF6B2B",
-                  background: "#0a0a0a",
-                  flexShrink: 0,
-                  marginTop: 2,
-                }}
-              />
-              <div>
-                <div style={{ ...body, fontWeight: 500, fontSize: 14, marginBottom: 3 }}>
-                  {stop.name}
-                </div>
-                <div style={{ ...body, fontSize: 12, color: "rgba(240,235,224,0.45)" }}>
-                  {stop.desc}
+                <div>
+                  <div
+                    style={{
+                      ...body,
+                      fontWeight: 500,
+                      fontSize: 14,
+                      marginBottom: 3,
+                    }}
+                  >
+                    {stop.name}
+                  </div>
+                  <div
+                    style={{
+                      ...body,
+                      fontSize: 12,
+                      color: "rgba(240,235,224,0.45)",
+                    }}
+                  >
+                    {stop.desc}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-        </div>{/* end z-index wrapper */}
+        {/* end z-index wrapper */}
       </section>
 
       <Divider />
@@ -842,7 +1083,14 @@ export default function Home() {
         >
           {t.s4Label}
         </p>
-        <h2 style={{ ...heading, fontSize: 36, color: "#f0ebe0", margin: "0 0 2rem" }}>
+        <h2
+          style={{
+            ...heading,
+            fontSize: 36,
+            color: "#f0ebe0",
+            margin: "0 0 2rem",
+          }}
+        >
           {t.s4Title}
         </h2>
 
@@ -860,10 +1108,24 @@ export default function Home() {
                 padding: "1rem 0",
               }}
             >
-              <div style={{ ...body, fontSize: 14, fontWeight: 500, marginBottom: "0.4rem" }}>
+              <div
+                style={{
+                  ...body,
+                  fontSize: 14,
+                  fontWeight: 500,
+                  marginBottom: "0.4rem",
+                }}
+              >
                 {item.q}
               </div>
-              <div style={{ ...body, fontSize: 13, color: "rgba(240,235,224,0.5)", lineHeight: 1.6 }}>
+              <div
+                style={{
+                  ...body,
+                  fontSize: 13,
+                  color: "rgba(240,235,224,0.5)",
+                  lineHeight: 1.6,
+                }}
+              >
                 {item.a}
               </div>
             </div>
@@ -885,10 +1147,24 @@ export default function Home() {
           gap: "1rem",
         }}
       >
-        <div style={{ ...heading, fontSize: 18, color: "#FF6B2B", letterSpacing: 2 }}>
+        <div
+          style={{
+            ...heading,
+            fontSize: 18,
+            color: "#FF6B2B",
+            letterSpacing: 2,
+          }}
+        >
           WORLD CUP NIGHTS
         </div>
-        <div style={{ display: "flex", gap: "1.5rem", fontSize: 12, color: "rgba(255,255,255,0.35)" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "1.5rem",
+            fontSize: 12,
+            color: "rgba(255,255,255,0.35)",
+          }}
+        >
           <span style={{ cursor: "pointer" }}>{t.footerInstagram}</span>
           <span style={{ cursor: "pointer" }}>{t.footerWhatsApp}</span>
           <span style={{ cursor: "pointer" }}>{t.footerContact}</span>

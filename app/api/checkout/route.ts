@@ -2,19 +2,22 @@ import { NextRequest } from "next/server";
 import { Preference } from "mercadopago";
 import { mpClient } from "@/lib/mercadopago";
 
-const TICKETS = {
-  entry: { title: "World Cup Nights — Entry", unit_price: 700 },
-  "open-bar": { title: "World Cup Nights — Open Bar", unit_price: 1100 },
+const TICKET_BASES = {
+  entry: { label: "Entry Ticket", unit_price: 700 },
+  "open-bar": { label: "Open Bar", unit_price: 1100 },
 } as const;
 
 export async function POST(request: NextRequest) {
-  const { ticketType } = await request.json();
+  const { ticketType, date } = await request.json();
 
-  if (!(ticketType in TICKETS)) {
+  if (!(ticketType in TICKET_BASES)) {
     return Response.json({ error: "Invalid ticket type" }, { status: 400 });
   }
 
-  const ticket = TICKETS[ticketType as keyof typeof TICKETS];
+  const base = TICKET_BASES[ticketType as keyof typeof TICKET_BASES];
+  const dayNum = date ? date.replace("June ", "") : "";
+  const itemTitle = `World Cup Nights — ${base.label} · June ${dayNum}`;
+
   const preference = new Preference(mpClient);
 
   let result;
@@ -24,12 +27,14 @@ export async function POST(request: NextRequest) {
         items: [
           {
             id: ticketType,
-            title: ticket.title,
+            title: itemTitle,
             quantity: 1,
-            unit_price: ticket.unit_price,
+            unit_price: base.unit_price,
             currency_id: "MXN",
           },
         ],
+        metadata: { ticketType, date, source: "worldcupnights-web" },
+        statement_descriptor: "WORLDCUPNIGHTS",
       },
     });
   } catch (err) {
