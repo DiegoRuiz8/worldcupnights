@@ -3,7 +3,7 @@ import Link from "next/link";
 export default function SuccessPage({
   searchParams,
 }: {
-  searchParams: { fecha?: string; ticket?: string };
+  searchParams: { [key: string]: string | undefined };
 }) {
   const fecha = searchParams.fecha
     ? decodeURIComponent(searchParams.fecha)
