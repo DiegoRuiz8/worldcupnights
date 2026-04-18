@@ -17,6 +17,8 @@ export async function POST(request: NextRequest) {
   const base = TICKET_BASES[ticketType as keyof typeof TICKET_BASES];
   const dayNum = date ? date.replace("June ", "") : "";
   const itemTitle = `World Cup Nights — ${base.label} · June ${dayNum}`;
+  const fechaEvento = `June ${dayNum}`;
+  const tipoTicket = base.label;
 
   const preference = new Preference(mpClient);
 
@@ -33,7 +35,17 @@ export async function POST(request: NextRequest) {
             currency_id: "MXN",
           },
         ],
-        metadata: { ticketType, date, source: "worldcupnights-web" },
+        metadata: {
+          fecha_evento: fechaEvento,
+          tipo_ticket: tipoTicket,
+          source: "worldcupnights-web",
+        },
+        back_urls: {
+          success: `${process.env.NEXT_PUBLIC_BASE_URL}/success?fecha=${encodeURIComponent(fechaEvento)}&ticket=${encodeURIComponent(tipoTicket)}`,
+          failure: `${process.env.NEXT_PUBLIC_BASE_URL}/failure`,
+          pending: `${process.env.NEXT_PUBLIC_BASE_URL}/success?fecha=${encodeURIComponent(fechaEvento)}&ticket=${encodeURIComponent(tipoTicket)}`,
+        },
+        auto_return: "approved",
         statement_descriptor: "WORLDCUPNIGHTS",
       },
     });
