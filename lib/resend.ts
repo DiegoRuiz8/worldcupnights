@@ -17,7 +17,7 @@ export async function sendConfirmationEmail(data: {
     subject: `🎉 You're in! World Cup Nights — ${data.fechaEvento}`,
     html: `
       <div style="background:#000;color:#fff;font-family:sans-serif;padding:40px;max-width:600px;margin:0 auto;">
-<img src="https://worldcupnights.lat/logo-orange.jpeg" alt="World Cup Nights" style="width:200px;margin-bottom:32px;border-radius:8px;" />        
+      <img src="https://worldcupnights.lat/logo-orange.jpeg" alt="World Cup Nights" style="width:280px;height:140px;object-fit:cover;margin-bottom:32px;border-radius:4px;" />
         <h1 style="color:#FF6B00;font-size:28px;margin-bottom:8px;">You're confirmed! 🏆</h1>
         <p style="color:#ccc;font-size:16px;margin-bottom:32px;">
           Get ready for Guadalajara's wildest World Cup night.
