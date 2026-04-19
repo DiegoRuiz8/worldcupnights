@@ -8,17 +8,43 @@ const TICKET_BASES = {
 } as const;
 
 export async function POST(request: NextRequest) {
-  const { ticketType, date } = await request.json();
+  const { items, date } = await request.json();
 
-  if (!(ticketType in TICKET_BASES)) {
-    return Response.json({ error: "Invalid ticket type" }, { status: 400 });
+  if (!items || !Array.isArray(items) || items.length === 0) {
+    return Response.json({ error: "No items" }, { status: 400 });
   }
 
-  const base = TICKET_BASES[ticketType as keyof typeof TICKET_BASES];
-  const dayNum = date ? date.replace("June ", "") : "";
-  const itemTitle = `World Cup Nights — ${base.label} · June ${dayNum}`;
+  const dayNum = date ? date.replace("June ", "").replace("Junio ", "") : "";
   const fechaEvento = `June ${dayNum}`;
-  const tipoTicket = base.label;
+
+  const mpItems = items
+    .filter((item: { ticketType: string; quantity: number }) =>
+      item.quantity > 0 && item.ticketType in TICKET_BASES
+    )
+    .map((item: { ticketType: string; quantity: number }) => {
+      const base = TICKET_BASES[item.ticketType as keyof typeof TICKET_BASES];
+      return {
+        id: item.ticketType,
+        title: `World Cup Nights — ${base.label} · June ${dayNum} (${item.quantity} ticket${item.quantity > 1 ? "s" : ""})`,
+        quantity: item.quantity,
+        unit_price: base.unit_price,
+        currency_id: "MXN",
+      };
+    });
+
+  if (mpItems.length === 0) {
+    return Response.json({ error: "Invalid items" }, { status: 400 });
+  }
+
+  const tipoTicket = mpItems
+    .map((i: { quantity: number; title: string }) =>
+      `${i.quantity}x ${i.title.split("—")[1]?.trim()}`
+    )
+    .join(", ");
+
+  const totalTickets = items.reduce(
+    (sum: number, i: { quantity: number }) => sum + i.quantity, 0
+  );
 
   const preference = new Preference(mpClient);
 
@@ -26,18 +52,11 @@ export async function POST(request: NextRequest) {
   try {
     result = await preference.create({
       body: {
-        items: [
-          {
-            id: ticketType,
-            title: itemTitle,
-            quantity: 1,
-            unit_price: base.unit_price,
-            currency_id: "MXN",
-          },
-        ],
+        items: mpItems,
         metadata: {
           fecha_evento: fechaEvento,
           tipo_ticket: tipoTicket,
+          total_tickets: totalTickets,
           source: "worldcupnights-web",
         },
         back_urls: {
@@ -51,13 +70,10 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     const error = err as Error & { cause?: unknown };
-    console.error("[checkout] MercadoPago preference.create failed");
-    console.error("[checkout] message:", error.message);
-    console.error("[checkout] cause:", error.cause);
-    console.error("[checkout] full error:", err);
+    console.error("[checkout] failed:", error.message);
     return Response.json({ error: "MercadoPago error" }, { status: 500 });
   }
 
-  console.log("[checkout] preference created, init_point:", result.init_point);
+  console.log("[checkout] items sent to MP:", JSON.stringify(mpItems, null, 2));
   return Response.json({ checkoutUrl: result.init_point });
 }

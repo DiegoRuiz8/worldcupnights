@@ -1,1280 +1,497 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import DateSelector from "./components/DateSelector";
+import CheckoutModal from "./components/CheckoutModal";
 
-// ---------------------------------------------------------------------------
-// Copy
-// ---------------------------------------------------------------------------
+// ─────────────────────────────────────────────────────────────
+// FONTS — add to your globals.css or layout.tsx:
+// @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap');
+// ─────────────────────────────────────────────────────────────
 
-const copy = {
+type Lang = "en" | "es";
+
+const DATES = [5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26, 27];
+
+const T = {
   en: {
-    navExp: "The Experience",
-    navTix: "Tickets",
-    navFaq: "FAQ",
-    navBook: "Book Now",
-    eyebrow: "Guadalajara · 15 Match Nights · June 2026",
-    heroTitle1: "GUADALAJARA'S",
-    heroTitle2: "WILDEST",
-    heroHighlight: "WORLD CUP NIGHT",
-    heroSub:
-      "A curated double-decker party bus for fans, travelers, and locals who want more than just another bar. Music, premium drinks, local hosts — one unforgettable night.",
-    heroCta1: "Choose Your Night",
-    heroCta2: "See What's Included",
-    heroBadge: "⚽ Limited to 40 seats per night · June 2026",
-    s1Label: "The Experience",
-    s1Title: "NOT JUST A BUS. A MOVING PARTY.",
-    p1Title: "No Random Crowd",
-    p1Body: "We cap every night at 40 people. Curated group, better energy, better connections.",
-    p2Title: "Real Mexican Spirits",
-    p2Body: "Not well drinks. Actual premium tequila and mezcal. Open bar means open bar.",
-    p3Title: "Never Feel Lost",
-    p3Body: "Bilingual local hosts from start to finish. They know the city, the spots, and how to keep the night alive.",
-    p4Title: "The Best of the City",
-    p4Body: "Centro Histórico, Chapultepec, Fan Zone — iconic Guadalajara nightlife in one night, no planning needed.",
-    s2Label: "Tickets",
-    s2Title: "PICK YOUR NIGHT",
-    t1Name: "ENTRY",
-    t1Tagline: "For the ones who want in",
-    t1Price: "$35",
-    t1PriceSub: "USD / ~$700 MXN",
-    t1F1: "Bus access all night",
-    t1F2: "Curated DJ set",
-    t1F3: "Local host crew",
-    t1F4: "Drinks available for purchase",
-    t1ItalicLine: "Show up, get on, enjoy the night.",
-    t1Btn: "Reserve Entry — $35 USD",
-    t2Badge: "Most Popular",
-    t2Name: "OPEN BAR",
-    t2Tagline: "For the full experience",
-    t2Price: "$55",
-    t2PriceSub: "USD / ~$1,100 MXN",
-    t2F1: "Everything in Entry",
-    t2F2: "Unlimited premium tequila",
-    t2F3: "Beer & cocktails included",
-    t2F4: "Priority boarding",
-    t2ItalicLine: "Zero friction. Full energy. Just drink and enjoy.",
-    t2Btn: "Reserve Open Bar — $55 USD",
-    s3Label: "The Route",
-    s3Title: "GUADALAJARA AT NIGHT",
-    r1Name: "Zona Rosa / Fan Zone",
-    r1Desc: "Departure point · 9:00 PM — Board up, meet the crew",
-    r2Name: "Centro Histórico",
-    r2Desc: "Guadalajara's heart — colonial architecture, live vibe",
-    r3Name: "Chapultepec",
-    r3Desc: "The nightlife corridor — see the city from above",
-    r4Name: "Final Stop · TBD",
-    r4Desc: "We drop you off at the hottest spot of the night",
-    s4Label: "FAQ",
-    s4Title: "NEED TO KNOW",
-    faq: [
-      { q: "When does it run?", a: "June 5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26 and 27. One departure per night at 9:00 PM from Plaza Liberación, Centro Histórico." },
-      { q: "Where do we meet?", a: "Fan Fest at Plaza Liberación, Centro Histórico, Guadalajara. We recommend arriving 15 minutes early. Exact boarding instructions sent after booking." },
-      { q: "Can I come alone?", a: "Absolutely. Most people do. The experience is designed to connect people — you will not feel out of place." },
-      { q: "Is it good if I don't speak Spanish?", a: "Yes. Our hosts are bilingual (English/Spanish) and the crowd is international. No Spanish needed." },
-      { q: "How long is the experience?", a: "Approximately 3 hours. Departure at 9:00 PM, ending around midnight at a final nightlife spot in the city." },
-      { q: "How many people fit on the bus?", a: "Maximum 40 people per night. We keep it intentionally small for a better social experience." },
-      { q: "Can I change my date?", a: "Yes — free date change up to 48 hours before your selected night. No refunds." },
-      { q: "Is it safe?", a: "Yes. Bilingual local hosts are with you the entire night, the route is curated through safe areas of the city, and capacity is limited so the group stays together." },
-      { q: "Is it safe for women attending alone?", a: "Yes. We have a strict code of conduct, mixed groups, and hosts present at all times. Many solo female travelers choose this experience specifically because it removes the uncertainty of navigating nightlife alone." },
-      { q: "What is the dress code?", a: "No formal dress code. Come as you are — football jersey, casual, or dressed up. The vibe is energetic but relaxed." },
-      { q: "Minimum age?", a: "18+ with valid ID. No exceptions." },
+    navExp: "Experience", navDates: "Dates", navTickets: "Tickets", navFaq: "FAQ", navBook: "Book Now",
+    heroTag: "Guadalajara · June 2026 · FIFA World Cup",
+    heroTitle: ["The Night", "Guadalajara", "Won't Forget"],
+    heroDesc: "A curated double-decker party bus through the city's best neighborhoods. 40 people. 15 match nights. One unforgettable experience.",
+    heroCta1: "Choose Your Night →", heroCta2: "See What's Included",
+    scroll: "Scroll",
+    stat1: "Match Nights", stat2: "Seats per Night", stat3: "Duration", stat4: "Departure Sharp",
+    expTag: "The Experience", expTitle: ["Not Just a Bus.", "A Moving Party."],
+    f1t: "Curated Crowd", f1d: "Capped at 40. Better energy, better connections — never a random mob.",
+    f2t: "Real Mexican Spirits", f2d: "Premium tequila & mezcal. Open bar means open bar — no fine print.",
+    f3t: "Bilingual Hosts", f3d: "Local crew, EN/ES. They know the city and how to keep the night alive.",
+    f4t: "Best of GDL", f4d: "Centro Histórico, Chapultepec, Fan Zone — all in one night, no planning needed.",
+    routeTag: "The Route", routeTitle: ["Guadalajara", "At Night"],
+    stop1t: "Zona Rosa / Fan Zone", stop1d: "Departure point · 9:00 PM — Board up, meet the crew",
+    stop2t: "Centro Histórico", stop2d: "Guadalajara's heart — colonial architecture, live vibe",
+    stop3t: "Chapultepec", stop3d: "The nightlife corridor — see the city from above",
+    stop4t: "Final Stop · TBD", stop4d: "We drop you off at the hottest spot of the night",
+    datesTag: "June 2026", datesTitle: ["Choose", "Your Night"],
+    dateMonth: "June", dateSpots: "~40 left",
+    datesInfo: "📍 Plaza Liberación, Centro Histórico · 9:00 PM · Free date change up to 48hrs before · No refunds",
+    ticketsTag: "Pricing", ticketsTitle: ["Pick Your", "Experience"],
+    entryName: "Entry", entrySub: "For the ones who want in", entryMxn: "USD / ~$700 MXN",
+    entryF: ["Bus access all night", "Curated DJ set", "Local host crew", "Drinks available for purchase"],
+    entryTagline: "Show up, get on, enjoy the night.", entryBtn: "Reserve Entry — $35 USD",
+    obName: "Open Bar", obSub: "For the full experience", obMxn: "USD / ~$1,100 MXN",
+    obF: ["Everything in Entry", "Unlimited premium tequila", "Beer & cocktails included", "Priority boarding"],
+    obTagline: "Zero friction. Full energy. Just drink and enjoy.", obBtn: "Reserve Open Bar — $55 USD",
+    mostPop: "Most Popular",
+    faqTag: "Need to Know", faqTitle: "FAQ",
+    faqs: [
+      { q: "When does it run?", a: "June 5, 6, 10–13, 17–20, 23–27. One departure per night at 9:00 PM from Plaza Liberación, Centro Histórico." },
+      { q: "Can I come alone?", a: "Absolutely. Most people do. The experience connects strangers — you won't feel out of place." },
+      { q: "Do I need to speak Spanish?", a: "No. Hosts are bilingual EN/ES and the crowd is international. Show up as you are." },
+      { q: "How long is the experience?", a: "About 3 hours. Departure 9:00 PM, ending around midnight at a final nightlife spot." },
+      { q: "Is it safe for solo travelers?", a: "Yes. Bilingual local hosts are with you the entire night, route is curated through safe areas." },
+      { q: "Can I change my date?", a: "Free date change up to 48 hours before your selected night. No refunds after that." },
     ],
-    footerInstagram: "Instagram",
-    footerWhatsApp: "WhatsApp",
-    footerContact: "Contact",
-    footerCopy: "© 2026 World Cup Nights · Guadalajara, México",
+    footerLinks: ["Instagram", "WhatsApp", "Contact"],
+    footerCopy: "© 2026 · Guadalajara, México",
+    stickyNight: "Selected Night", stickyTicket: "Ticket",
+    stickyNoTicket: "Choose a ticket below →", stickyChange: "Change date", stickyBtn: "Reserve Now →",
   },
   es: {
-    navExp: "La Experiencia",
-    navTix: "Boletos",
-    navFaq: "Preguntas",
-    navBook: "Reservar",
-    eyebrow: "Guadalajara · 15 Noches · Junio 2026",
-    heroTitle1: "LA NOCHE",
-    heroTitle2: "MÁS",
-    heroHighlight: "ÉPICA DEL MUNDIAL",
-    heroSub:
-      "Un camión de dos pisos curado para fans, viajeros y locales que quieren más que una noche normal. Música, tequila premium, hosts locales — una noche que no vas a olvidar.",
-    heroCta1: "Elige Tu Noche",
-    heroCta2: "¿Qué incluye?",
-    heroBadge: "⚽ Solo 40 lugares por noche · Junio 2026",
-    s1Label: "La Experiencia",
-    s1Title: "NO ES UN CAMIÓN. ES UNA FIESTA QUE SE MUEVE.",
-    p1Title: "Sin Crowd Aleatorio",
-    p1Body: "Máximo 40 personas por noche. Grupo curado, mejor energía, mejores conexiones.",
-    p2Title: "Spirits Mexicanos Reales",
-    p2Body: "No es alcohol de mala calidad. Tequila y mezcal premium de verdad. Barra libre significa barra libre.",
-    p3Title: "Nunca Te Pierdes",
-    p3Body: "Hosts locales bilingües de principio a fin. Conocen la ciudad, los spots y cómo mantener la noche viva.",
-    p4Title: "Lo Mejor de la Ciudad",
-    p4Body: "Centro Histórico, Chapultepec, Fan Zone — lo mejor de Guadalajara en una sola noche, sin planear nada.",
-    s2Label: "Boletos",
-    s2Title: "ELIGE TU NOCHE",
-    t1Name: "ENTRADA",
-    t1Tagline: "Para los que quieren estar ahí",
-    t1Price: "$700",
-    t1PriceSub: "MXN / ~$35 USD",
-    t1F1: "Acceso al camión toda la noche",
-    t1F2: "DJ set curado",
-    t1F3: "Crew de hosts locales",
-    t1F4: "Bebidas disponibles para comprar",
-    t1ItalicLine: "Súbete, disfruta la noche.",
-    t1Btn: "Reservar Entrada — $700 MXN",
-    t2Badge: "Más popular",
-    t2Name: "BARRA LIBRE",
-    t2Tagline: "Para la experiencia completa",
-    t2Price: "$1,100",
-    t2PriceSub: "MXN / ~$55 USD",
-    t2F1: "Todo lo de Entrada incluido",
-    t2F2: "Tequila premium ilimitado",
-    t2F3: "Cerveza y cócteles incluidos",
-    t2F4: "Abordaje prioritario",
-    t2ItalicLine: "Sin fricciones. Energía total. Solo disfruta.",
-    t2Btn: "Reservar Barra Libre — $1,100 MXN",
-    s3Label: "La Ruta",
-    s3Title: "GUADALAJARA DE NOCHE",
-    r1Name: "Zona Rosa / Fan Zone",
-    r1Desc: "Punto de salida · 9:00 PM — Sube y conoce al crew",
-    r2Name: "Centro Histórico",
-    r2Desc: "El corazón de Guadalajara — arquitectura colonial, vibra total",
-    r3Name: "Chapultepec",
-    r3Desc: "El corredor nocturno — la ciudad desde arriba",
-    r4Name: "Parada final · Por definir",
-    r4Desc: "Te dejamos en el spot más caliente de la noche",
-    s4Label: "FAQ",
-    s4Title: "LO QUE NECESITAS SABER",
-    faq: [
-      { q: "¿Cuándo opera?", a: "5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26 y 27 de junio. Una salida por noche a las 9:00 PM desde Plaza Liberación, Centro Histórico." },
-      { q: "¿Dónde nos encontramos?", a: "Fan Fest en Plaza Liberación, Centro Histórico, Guadalajara. Recomendamos llegar 15 minutos antes. Las instrucciones exactas de abordaje se envían después de reservar." },
-      { q: "¿Puedo ir solo/a?", a: "Claro que sí. La mayoría lo hace. La experiencia está diseñada para conectar personas — no te vas a sentir fuera de lugar." },
-      { q: "¿Funciona si no hablo español?", a: "Sí. Nuestros hosts son bilingües (inglés/español) y el grupo es internacional. No necesitas español." },
-      { q: "¿Cuánto dura la experiencia?", a: "Aproximadamente 3 horas. Salida a las 9:00 PM, terminando alrededor de medianoche en un spot final de la ciudad." },
-      { q: "¿Cuántas personas caben en el camión?", a: "Máximo 40 personas por noche. Lo mantenemos pequeño intencionalmente para una mejor experiencia social." },
-      { q: "¿Puedo cambiar mi fecha?", a: "Sí — cambio de fecha gratis hasta 48 horas antes de tu noche seleccionada. Sin reembolsos." },
-      { q: "¿Es seguro?", a: "Sí. Hosts locales bilingües están contigo toda la noche, la ruta pasa por zonas seguras de la ciudad y el cupo es limitado para que el grupo permanezca unido." },
-      { q: "¿Es seguro para mujeres que van solas?", a: "Sí. Tenemos un código de conducta estricto, grupos mixtos y hosts presentes en todo momento. Muchas viajeras solo eligen esta experiencia precisamente porque elimina la incertidumbre de salir solas en una ciudad desconocida." },
-      { q: "¿Hay código de vestimenta?", a: "No. Ven como quieras — jersey de fútbol, casual o arreglado. El ambiente es energético pero relajado." },
-      { q: "¿Edad mínima?", a: "18+ con identificación válida. Sin excepciones." },
+    navExp: "Experiencia", navDates: "Fechas", navTickets: "Boletos", navFaq: "FAQ", navBook: "Reservar",
+    heroTag: "Guadalajara · Junio 2026 · Copa del Mundo FIFA",
+    heroTitle: ["La Noche que", "Guadalajara", "No Olvidará"],
+    heroDesc: "Un party bus de doble piso por los mejores rincones de la ciudad. 40 personas. 15 noches de partido. Una experiencia inolvidable.",
+    heroCta1: "Elige Tu Noche →", heroCta2: "Ver Qué Incluye",
+    scroll: "Bajar",
+    stat1: "Noches de Partido", stat2: "Lugares por Noche", stat3: "Duración", stat4: "Salida en Punto",
+    expTag: "La Experiencia", expTitle: ["No es Solo un Bus.", "Es una Fiesta en Movimiento."],
+    f1t: "Crowd Curado", f1d: "Máximo 40 personas. Mejor energía, mejores conexiones.",
+    f2t: "Spirits Mexicanos de Verdad", f2d: "Tequila y mezcal premium. Barra libre significa barra libre.",
+    f3t: "Hosts Bilingues", f3d: "Crew local, EN/ES. Conocen la ciudad y cómo animar la noche.",
+    f4t: "Lo Mejor de GDL", f4d: "Centro Histórico, Chapultepec, Fan Zone — todo en una noche.",
+    routeTag: "La Ruta", routeTitle: ["Guadalajara", "De Noche"],
+    stop1t: "Zona Rosa / Fan Zone", stop1d: "Punto de salida · 9:00 PM — Súbete, conoce al crew",
+    stop2t: "Centro Histórico", stop2d: "El corazón de Guadalajara — arquitectura colonial, ambiente en vivo",
+    stop3t: "Chapultepec", stop3d: "El corredor de la noche — ve la ciudad desde arriba",
+    stop4t: "Parada Final · TBD", stop4d: "Te dejamos en el lugar más chido de la noche",
+    datesTag: "Junio 2026", datesTitle: ["Elige", "Tu Noche"],
+    dateMonth: "Junio", dateSpots: "~40 lugares",
+    datesInfo: "📍 Plaza Liberación, Centro Histórico · 9:00 PM · Cambio de fecha gratis hasta 48hrs antes · Sin reembolsos",
+    ticketsTag: "Precios", ticketsTitle: ["Elige Tu", "Experiencia"],
+    entryName: "Entrada", entrySub: "Para los que quieren estar ahí", entryMxn: "USD / ~$700 MXN",
+    entryF: ["Acceso al bus toda la noche", "Set de DJ curado", "Crew de hosts locales", "Bebidas disponibles para comprar"],
+    entryTagline: "Llega, súbete y disfruta la noche.", entryBtn: "Reservar Entrada — $35 USD",
+    obName: "Barra Libre", obSub: "Para la experiencia completa", obMxn: "USD / ~$1,100 MXN",
+    obF: ["Todo lo de Entrada", "Tequila premium ilimitado", "Cerveza y cocteles incluidos", "Abordaje prioritario"],
+    obTagline: "Sin fricción. Energía total. Solo toma y disfruta.", obBtn: "Reservar Barra Libre — $55 USD",
+    mostPop: "Más Popular",
+    faqTag: "Lo Que Necesitas Saber", faqTitle: "Preguntas Frecuentes",
+    faqs: [
+      { q: "¿Cuándo opera?", a: "Junio 5, 6, 10–13, 17–20, 23–27. Una salida por noche a las 9:00 PM desde Plaza Liberación, Centro Histórico." },
+      { q: "¿Puedo ir solo/a?", a: "Absolutamente. La mayoría va solo/a. La experiencia conecta personas — no te sentirás fuera de lugar." },
+      { q: "¿Necesito hablar inglés?", a: "No. Los hosts son bilingues EN/ES y el grupo es internacional." },
+      { q: "¿Cuánto dura la experiencia?", a: "Aproximadamente 3 horas. Salida 9:00 PM, termina cerca de medianoche en un spot de antro." },
+      { q: "¿Es seguro para viajeros solos?", a: "Sí. Los hosts locales bilingues están contigo toda la noche y la ruta es por zonas seguras." },
+      { q: "¿Puedo cambiar mi fecha?", a: "Cambio de fecha gratis hasta 48 horas antes. Sin reembolsos después." },
     ],
-    footerInstagram: "Instagram",
-    footerWhatsApp: "WhatsApp",
-    footerContact: "Contacto",
-    footerCopy: "© 2026 World Cup Nights · Guadalajara, México",
+    footerLinks: ["Instagram", "WhatsApp", "Contacto"],
+    footerCopy: "© 2026 · Guadalajara, México",
+    stickyNight: "Noche Seleccionada", stickyTicket: "Boleto",
+    stickyNoTicket: "Elige un boleto abajo →", stickyChange: "Cambiar fecha", stickyBtn: "Reservar Ahora →",
   },
 } as const;
 
-type Lang = keyof typeof copy;
+// ─── Styles ───────────────────────────────────────────────────
+const ORANGE = "#FF5C00";
+const BG = "#080808";
+const SURFACE = "#111111";
+const SURFACE2 = "#1a1a1a";
+const TEXT = "#f0ece4";
+const MUTED = "#888880";
+const BORDER = "rgba(255,255,255,0.08)";
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
-
-function CheckDot() {
-  return (
-    <span
-      style={{
-        width: 14,
-        height: 14,
-        borderRadius: "50%",
-        background: "rgba(255,107,43,0.2)",
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        flexShrink: 0,
-      }}
-    >
-      <span
-        style={{
-          display: "block",
-          width: 5,
-          height: 5,
-          background: "#FF6B2B",
-          borderRadius: "50%",
-        }}
-      />
-    </span>
-  );
+const bebas: React.CSSProperties = { fontFamily: "var(--font-bebas), sans-serif" };
+const mono: React.CSSProperties = { fontFamily: "var(--font-space-mono), monospace" };
+const dm: React.CSSProperties = { fontFamily: "var(--font-dm-sans), sans-serif" };
+// ─── Reveal hook ──────────────────────────────────────────────
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVisible(true); }, { threshold: 0.08 });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, style: { opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(32px)", transition: "opacity 0.7s ease, transform 0.7s ease" } as React.CSSProperties };
 }
 
-function Divider() {
-  return (
-    <div
-      style={{
-        height: "0.5px",
-        background: "rgba(255,255,255,0.08)",
-        margin: "0 2rem",
-      }}
-    />
-  );
+function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const { ref, style } = useReveal();
+  return <div ref={ref} style={{ ...style, transitionDelay: `${delay}ms` }}>{children}</div>;
 }
 
-function IconSliders() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#FF6B2B"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    >
-      <line x1="4" y1="21" x2="4" y2="14" />
-      <line x1="4" y1="10" x2="4" y2="3" />
-      <line x1="12" y1="21" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12" y2="3" />
-      <line x1="20" y1="21" x2="20" y2="16" />
-      <line x1="20" y1="12" x2="20" y2="3" />
-      <line x1="1" y1="14" x2="7" y2="14" />
-      <line x1="9" y1="8" x2="15" y2="8" />
-      <line x1="17" y1="16" x2="23" y2="16" />
-    </svg>
-  );
-}
-
-function IconGlass() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#FF6B2B"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 22h8" />
-      <line x1="12" y1="11" x2="12" y2="22" />
-      <path d="M5 3l2 7c.6 2 2.2 3.2 5 3.2s4.4-1.2 5-3.2L19 3H5z" />
-    </svg>
-  );
-}
-
-function IconGlobe() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#FF6B2B"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="2" y1="12" x2="22" y2="12" />
-      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-    </svg>
-  );
-}
-
-function IconMic() {
-  return (
-    <svg
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="#FF6B2B"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-      <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
-      <line x1="12" y1="19" x2="12" y2="23" />
-      <line x1="8" y1="23" x2="16" y2="23" />
-    </svg>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Page
-// ---------------------------------------------------------------------------
-
+// ─────────────────────────────────────────────────────────────
+// PAGE
+// ─────────────────────────────────────────────────────────────
 export default function Home() {
   const [lang, setLang] = useState<Lang>("en");
-  const [loadingTier, setLoadingTier] = useState<"entry" | "open-bar" | null>(
-    null,
-  );
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const t = copy[lang];
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalInitialType, setModalInitialType] = useState<"entry" | "open-bar">("entry");
+  const [scrolled, setScrolled] = useState(false);
+  const t = T[lang];
 
   useEffect(() => {
-    const reset = () => setLoadingTier(null);
-    window.addEventListener("pageshow", reset);
-    return () => window.removeEventListener("pageshow", reset);
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  async function handleCheckout(tier: "entry" | "open-bar", date: string) {
-    setLoadingTier(tier);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ticketType: tier, quantity: 1, date }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Checkout failed");
-      window.location.href = data.checkoutUrl;
-    } catch {
-      alert("Error al procesar el pago. Intenta de nuevo.");
-    } finally {
-      setLoadingTier(null);
-    }
+  function scrollTo(id: string) {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
   }
 
-  const heading: React.CSSProperties = { fontFamily: "var(--font-bebas)" };
-  const body: React.CSSProperties = { fontFamily: "var(--font-dm-sans)" };
+  function openModal(type: "entry" | "open-bar") {
+    if (!selectedDate) { scrollTo("dates"); return; }
+    setModalInitialType(type);
+    setModalOpen(true);
+  }
+
+  function selectDate(day: number) {
+    setSelectedDate(`${t.dateMonth} ${day}`);
+  }
+
+  const stickyVisible = !!selectedDate;
+  const stickyLabel = selectedDate ? `${selectedDate}` : "—";
 
   return (
-    <div
-      style={{
-        background: "#0a0a0a",
-        color: "#f0ebe0",
-        fontFamily: "var(--font-dm-sans)",
-        minHeight: "100vh",
-      }}
-    >
-      {/* ------------------------------------------------------------------ */}
-      {/* NAV                                                                 */}
-      {/* ------------------------------------------------------------------ */}
-      <nav
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "1.2rem 2rem",
-          borderBottom: "0.5px solid rgba(255,255,255,0.1)",
-        }}
-      >
-        <span
-          className="text-[15px] md:text-[22px] whitespace-nowrap"
-          style={{
-            ...heading,
-            letterSpacing: 2,
-            color: "#FF6B2B",
-          }}
-        >
-          WORLD CUP NIGHTS
-        </span>
+    <div style={{ background: BG, color: TEXT, fontFamily: "'DM Sans', sans-serif", minHeight: "100vh", overflowX: "hidden" }}>
 
-        <div
-          className="hidden md:flex"
-          style={{
-            gap: "1.5rem",
-            fontSize: 13,
-            color: "rgba(255,255,255,0.5)",
-          }}
-        >
-          <a
-            href="#experience"
-            style={{
-              color: "inherit",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            {t.navExp}
-          </a>
-          <a
-            href="#tickets"
-            style={{
-              color: "inherit",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            {t.navTix}
-          </a>
-          <a
-            href="#faq"
-            style={{
-              color: "inherit",
-              textDecoration: "none",
-              cursor: "pointer",
-            }}
-          >
-            {t.navFaq}
-          </a>
+      {/* ── NAV ── */}
+      <nav style={{
+        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        padding: "20px 48px",
+        background: scrolled ? "rgba(8,8,8,0.97)" : "linear-gradient(to bottom, rgba(8,8,8,0.9), transparent)",
+        borderBottom: scrolled ? `1px solid ${BORDER}` : "none",
+        transition: "background 0.3s, border 0.3s",
+      }}>
+        <div style={{ ...bebas, fontSize: 18, letterSpacing: 3 }}>WCN</div>
+        <div style={{ display: "flex", gap: 32, listStyle: "none" }}>
+          {[["experience", t.navExp], ["dates", t.navDates], ["tickets", t.navTickets], ["faq", t.navFaq]].map(([id, label]) => (
+            <button key={id} onClick={() => scrollTo(id)} style={{ ...dm, background: "none", border: "none", color: MUTED, fontSize: 12, letterSpacing: "1.5px", textTransform: "uppercase", cursor: "pointer", transition: "color 0.2s" }}
+              onMouseEnter={e => (e.currentTarget.style.color = TEXT)} onMouseLeave={e => (e.currentTarget.style.color = MUTED)}>
+              {label}
+            </button>
+          ))}
         </div>
-
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          {/* Language switcher */}
-          <div
-            style={{
-              display: "flex",
-              gap: 8,
-              alignItems: "center",
-              fontSize: 11,
-              color: "rgba(255,255,255,0.4)",
-            }}
-          >
+          {/* Lang toggle */}
+          <div style={{ display: "flex", border: `1px solid ${BORDER}`, borderRadius: 2, overflow: "hidden" }}>
             {(["en", "es"] as Lang[]).map((l) => (
-              <button
-                key={l}
-                onClick={() => setLang(l)}
-                style={{
-                  ...body,
-                  background: "none",
-                  border: `0.5px solid ${lang === l ? "#FF6B2B" : "rgba(255,255,255,0.15)"}`,
-                  color: lang === l ? "#FF6B2B" : "rgba(255,255,255,0.4)",
-                  padding: "3px 8px",
-                  borderRadius: 3,
-                  cursor: "pointer",
-                  fontSize: 11,
-                }}
-              >
-                {l.toUpperCase()}
-              </button>
+              <button key={l} onClick={() => setLang(l)} style={{
+                ...mono, background: lang === l ? ORANGE : "transparent",
+                color: lang === l ? "#000" : MUTED, border: "none",
+                fontSize: 11, letterSpacing: 1, padding: "7px 14px", cursor: "pointer", transition: "all 0.2s",
+              }}>{l.toUpperCase()}</button>
             ))}
           </div>
-
-          <a
-            href="#dates"
-            className="text-[11px] px-3 py-1.5 md:text-[13px] md:px-[18px] md:py-[8px]"
-            style={{
-              ...body,
-              background: "#FF6B2B",
-              color: "#fff",
-              cursor: "pointer",
-              borderRadius: 4,
-              textDecoration: "none",
-              display: "inline-block",
-            }}
-          >
-            {t.navBook}
-          </a>
+          <button onClick={() => scrollTo("dates")} style={{
+            ...dm, background: ORANGE, color: "#000", border: "none",
+            padding: "9px 22px", fontSize: 12, fontWeight: 500, letterSpacing: 1,
+            borderRadius: 2, cursor: "pointer",
+          }}>{t.navBook}</button>
         </div>
       </nav>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* HERO                                                                */}
-      {/* ------------------------------------------------------------------ */}
-      <section
-        style={{
-          position: "relative",
-          minHeight: "88vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          textAlign: "center",
-          padding: "5rem 2rem 4rem",
-          overflow: "hidden",
-        }}
-      >
-        {/* Full-bleed bus photo */}
-        <Image
-          src="/bus-photo.png"
-          alt="World Cup Nights party bus"
-          fill
-          priority
-          quality={90}
-          sizes="100vw"
-          className="hero-bus-img"
-          style={{ objectFit: "cover" }}
-        />
+      {/* ── STICKY BAR ── */}
+      <div style={{
+        position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
+        background: "rgba(8,8,8,0.97)", borderTop: `1px solid ${BORDER}`,
+        padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        transform: stickyVisible ? "translateY(0)" : "translateY(100%)",
+        transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
+        backdropFilter: "blur(20px)",
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+          <div>
+            <div style={{ ...mono, fontSize: 9, letterSpacing: 2, color: MUTED, textTransform: "uppercase", marginBottom: 4 }}>{t.stickyNight}</div>
+            <div style={{ ...bebas, fontSize: 24, color: ORANGE }}>{stickyLabel}</div>
+          </div>
+          <div style={{ width: 1, height: 40, background: BORDER }} />
+          <div>
+            <div style={{ ...mono, fontSize: 9, letterSpacing: 2, color: MUTED, textTransform: "uppercase", marginBottom: 4 }}>{t.stickyTicket}</div>
+            <div style={{ fontSize: 13, color: MUTED }}>{t.stickyNoTicket}</div>
+          </div>
+          <div style={{ width: 1, height: 40, background: BORDER }} />
+          <button onClick={() => scrollTo("dates")} style={{ ...dm, background: "none", border: "none", color: MUTED, fontSize: 12, textDecoration: "underline", cursor: "pointer" }}>{t.stickyChange}</button>
+        </div>
+        <button onClick={() => openModal("entry")} style={{
+          ...dm, background: ORANGE, color: "#000", border: "none",
+          padding: "14px 36px", fontSize: 14, fontWeight: 500, letterSpacing: 0.5,
+          cursor: "pointer", borderRadius: 2, transition: "background 0.2s",
+        }}>{t.stickyBtn}</button>
+      </div>
 
-        {/* Dark overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 100%), " +
-              "linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
-            pointerEvents: "none",
-          }}
-        />
-
-        {/* Orange radial glow */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,107,43,0.18) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
-
-        {/* Content */}
-        <div style={{ position: "relative", zIndex: 10 }}>
-          <p
-            className="text-[14px] tracking-[0.2em] md:text-[11px] md:tracking-[4px]"
-            style={{
-              ...body,
-              textTransform: "uppercase",
-              color: "#FF6B2B",
-              marginBottom: "1rem",
-            }}
-          >
-            {t.eyebrow}
-          </p>
-
-          <h1
-            style={{
-              ...heading,
-              fontSize: "clamp(52px, 10vw, 90px)",
-              lineHeight: 0.95,
-              color: "#f0ebe0",
-              margin: "0 0 0.5rem",
-            }}
-          >
-            {t.heroTitle1}
-            <br />
-            {t.heroTitle2}{" "}
-            <span style={{ color: "#FF6B2B" }}>{t.heroHighlight}</span>
+      {/* ── HERO ── */}
+      <section style={{ height: "100vh", position: "relative", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "80px 48px", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <Image src="/bus-photo.png" alt="Party Bus" fill priority quality={90} sizes="100vw" style={{ objectFit: "cover", objectPosition: "center" }} />
+        </div>
+        <div style={{ position: "absolute", inset: 0, zIndex: 1, background: "linear-gradient(to top, rgba(8,8,8,1) 0%, rgba(8,8,8,0.7) 40%, rgba(8,8,8,0.2) 100%), linear-gradient(to right, rgba(8,8,8,0.5) 0%, transparent 60%)" }} />
+        <div style={{ position: "relative", zIndex: 2 }}>
+          <div style={{ ...mono, fontSize: 11, letterSpacing: 3, color: ORANGE, textTransform: "uppercase", marginBottom: 20, animation: "fadeUp 0.8s 0.2s both" }}>
+            {t.heroTag}
+          </div>
+          <h1 style={{ ...bebas, fontSize: "clamp(64px, 9vw, 130px)", lineHeight: 0.9, letterSpacing: -1, marginBottom: 36, animation: "fadeUp 0.9s 0.4s both" }}>
+            {t.heroTitle[0]}<br />
+            <span style={{ color: ORANGE }}>{t.heroTitle[1]}</span><br />
+            {t.heroTitle[2]}
           </h1>
-
-          <p
-            className="text-[16px] md:text-[15px]"
-            style={{
-              ...body,
-              color: "#ffffff",
-              maxWidth: 440,
-              margin: "1rem auto 2rem",
-              lineHeight: 1.6,
-              textShadow:
-                "0 2px 12px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.9)",
-            }}
-          >
-            {t.heroSub}
-          </p>
-
-          <div
-            style={{
-              display: "flex",
-              gap: 12,
-              justifyContent: "center",
-              flexWrap: "wrap",
-            }}
-          >
-            <a
-              href="#dates"
-              style={{
-                ...body,
-                background: "#FF6B2B",
-                color: "#fff",
-                padding: "14px 28px",
-                fontSize: 14,
-                cursor: "pointer",
-                borderRadius: 4,
-                fontWeight: 500,
-                textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
-              {t.heroCta1}
-            </a>
-            <a
-              href="#experience"
-              style={{
-                ...body,
-                background: "transparent",
-                color: "#f0ebe0",
-                border: "1px solid rgba(240,235,224,0.3)",
-                padding: "14px 28px",
-                fontSize: 14,
-                cursor: "pointer",
-                borderRadius: 4,
-                textDecoration: "none",
-                display: "inline-block",
-              }}
-            >
-              {t.heroCta2}
-            </a>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", animation: "fadeUp 0.9s 0.7s both" }}>
+            <p style={{ ...dm, fontSize: 15, color: "rgba(240,236,228,0.7)", maxWidth: 400, lineHeight: 1.8, margin: 0 }}>{t.heroDesc}</p>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
+              <button onClick={() => scrollTo("dates")} style={{ ...dm, background: ORANGE, color: "#000", border: "none", padding: "16px 40px", fontSize: 14, fontWeight: 500, letterSpacing: 0.5, cursor: "pointer", borderRadius: 2, transition: "background 0.2s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#ff7a2e"} onMouseLeave={e => e.currentTarget.style.background = ORANGE}>
+                {t.heroCta1}
+              </button>
+              <button onClick={() => scrollTo("experience")} style={{ ...dm, background: "transparent", color: MUTED, border: `1px solid ${BORDER}`, padding: "15px 40px", fontSize: 14, cursor: "pointer", borderRadius: 2, transition: "all 0.2s" }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; e.currentTarget.style.color = TEXT; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = BORDER; e.currentTarget.style.color = MUTED; }}>
+                {t.heroCta2}
+              </button>
+            </div>
           </div>
-
-          <div
-            style={{
-              display: "inline-block",
-              background: "rgba(255,107,43,0.15)",
-              border: "1px solid rgba(255,107,43,0.3)",
-              color: "#FF6B2B",
-              fontSize: 11,
-              padding: "4px 12px",
-              borderRadius: 20,
-              marginTop: "2rem",
-            }}
-          >
-            {t.heroBadge}
-          </div>
+        </div>
+        {/* Scroll hint */}
+        <div style={{ position: "absolute", bottom: 36, left: "50%", transform: "translateX(-50%)", zIndex: 2, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, animation: "fadeIn 1s 1.2s both" }}>
+          <div style={{ width: 1, height: 50, background: `linear-gradient(to bottom, ${ORANGE}, transparent)` }} />
+          <div style={{ ...mono, fontSize: 9, letterSpacing: 3, color: MUTED, textTransform: "uppercase" }}>{t.scroll}</div>
         </div>
       </section>
 
-      {/* ------------------------------------------------------------------ */}
-      {/* URGENCY STRIP                                                       */}
-      {/* ------------------------------------------------------------------ */}
-      <div
-        style={{
-          background: "#FF6B2B",
-          padding: "0.75rem 2rem",
-          textAlign: "center",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-bebas)",
-            fontSize: 15,
-            letterSpacing: "0.08em",
-            color: "#000",
-            fontWeight: 500,
-          }}
-        >
-          {lang === "en"
-            ? "🔥 15 match nights · 40 seats max per night · Prices increase closer to match dates"
-            : "🔥 15 noches de partido · Máximo 40 lugares por noche · Precios suben conforme se acercan las fechas"}
-        </span>
-      </div>
-
-      <Divider />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* DATES                                                               */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="dates" style={{ background: "#0a0a0a" }}>
-        <DateSelector
-          lang={lang}
-          selectedDate={selectedDate}
-          onSelect={setSelectedDate}
-        />
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* TICKETS                                                             */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="tickets" style={{ padding: "1rem 2rem 3.5rem" }}>
-        <p
-          style={{
-            ...body,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.35)",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {t.s2Label}
-        </p>
-        <h2
-          style={{
-            ...heading,
-            fontSize: 36,
-            color: "#f0ebe0",
-            margin: "0 0 2rem",
-          }}
-        >
-          {t.s2Title}
-        </h2>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-            gap: 16,
-          }}
-        >
-          {/* Entry ticket */}
-          <div
-            style={{
-              borderRadius: 10,
-              padding: "1.75rem",
-              position: "relative",
-              overflow: "hidden",
-              background: "rgba(255,255,255,0.04)",
-              border: "0.5px solid rgba(255,255,255,0.12)",
-            }}
-          >
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.1rem" }}>
-              {t.t1Name}
+      {/* ── STATS ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+        {[["15", t.stat1], ["40", t.stat2], ["3h", t.stat3], ["9PM", t.stat4]].map(([n, l], i) => (
+          <Reveal key={l} delay={i * 100}>
+            <div style={{ padding: "28px 40px", borderRight: i < 3 ? `1px solid ${BORDER}` : "none", transition: "background 0.3s" }}
+              onMouseEnter={e => e.currentTarget.style.background = SURFACE} onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <div style={{ ...bebas, fontSize: 44, color: ORANGE, lineHeight: 1, marginBottom: 2 }}>{n}</div>
+              <div style={{ ...mono, fontSize: 11, letterSpacing: "1.5px", textTransform: "uppercase", color: MUTED }}>{l}</div>
             </div>
-            <div
-              style={{
-                ...body,
-                fontSize: 14,
-                color: "rgba(255,255,255,0.6)",
-                marginBottom: "0.75rem",
-              }}
-            >
-              {t.t1Tagline}
-            </div>
-            <div
-              style={{
-                ...body,
-                fontSize: 32,
-                fontWeight: 500,
-                color: "#FF6B2B",
-                marginBottom: "1.25rem",
-              }}
-            >
-              {t.t1Price}{" "}
-              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>
-                {t.t1PriceSub}
-              </span>
-            </div>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: "0 0 1.5rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              {[t.t1F1, t.t1F2, t.t1F3, t.t1F4].map((feat) => (
-                <li
-                  key={feat}
-                  style={{
-                    ...body,
-                    fontSize: 13,
-                    color: "rgba(240,235,224,0.7)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <CheckDot />
-                  {feat}
-                </li>
-              ))}
-            </ul>
-            <div
-              style={{
-                ...body,
-                fontSize: 12,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.4)",
-                marginBottom: "1rem",
-              }}
-            >
-              {t.t1ItalicLine}
-            </div>
-            <button
-              onClick={() => {
-                if (!selectedDate) {
-                  alert(lang === "en" ? "Please select a date first" : "Primero elige una fecha");
-                  return;
-                }
-                handleCheckout("entry", selectedDate);
-              }}
-              disabled={loadingTier !== null}
-              style={{
-                ...body,
-                width: "100%",
-                padding: 12,
-                fontSize: 13,
-                cursor: loadingTier !== null ? "default" : "pointer",
-                borderRadius: 6,
-                fontWeight: 500,
-                background: "transparent",
-                color: "#f0ebe0",
-                border: "0.5px solid rgba(255,255,255,0.25)",
-                opacity: loadingTier !== null ? 0.7 : 1,
-              }}
-            >
-              {loadingTier === "entry" ? "..." : t.t1Btn}
-            </button>
-          </div>
-
-          {/* Open Bar ticket */}
-          <div
-            style={{
-              borderRadius: 10,
-              padding: "1.75rem",
-              position: "relative",
-              overflow: "hidden",
-              background: "#1a0e06",
-              border: "1.5px solid #FF6B2B",
-            }}
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: 14,
-                right: 14,
-                background: "#FF6B2B",
-                color: "#fff",
-                fontSize: 10,
-                padding: "3px 9px",
-                borderRadius: 20,
-              }}
-            >
-              {t.t2Badge}
-            </div>
-            <div style={{ ...heading, fontSize: 26, marginBottom: "0.1rem" }}>
-              {t.t2Name}
-            </div>
-            <div
-              style={{
-                ...body,
-                fontSize: 14,
-                color: "rgba(255,255,255,0.6)",
-                marginBottom: "0.75rem",
-              }}
-            >
-              {t.t2Tagline}
-            </div>
-            <div
-              style={{
-                ...body,
-                fontSize: 32,
-                fontWeight: 500,
-                color: "#FF6B2B",
-                marginBottom: "1.25rem",
-              }}
-            >
-              {t.t2Price}{" "}
-              <span style={{ fontSize: 14, color: "rgba(240,235,224,0.4)" }}>
-                {t.t2PriceSub}
-              </span>
-            </div>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: "0 0 1.5rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              {[t.t2F1, t.t2F2, t.t2F3, t.t2F4].map((feat) => (
-                <li
-                  key={feat}
-                  style={{
-                    ...body,
-                    fontSize: 13,
-                    color: "rgba(240,235,224,0.7)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 8,
-                  }}
-                >
-                  <CheckDot />
-                  {feat}
-                </li>
-              ))}
-            </ul>
-            <div
-              style={{
-                ...body,
-                fontSize: 12,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.4)",
-                marginBottom: "1rem",
-              }}
-            >
-              {t.t2ItalicLine}
-            </div>
-            <button
-              onClick={() => {
-                if (!selectedDate) {
-                  alert(lang === "en" ? "Please select a date first" : "Primero elige una fecha");
-                  return;
-                }
-                handleCheckout("open-bar", selectedDate);
-              }}
-              disabled={loadingTier !== null}
-              style={{
-                ...body,
-                width: "100%",
-                padding: 12,
-                fontSize: 13,
-                cursor: loadingTier !== null ? "default" : "pointer",
-                borderRadius: 6,
-                fontWeight: 500,
-                background: "#FF6B2B",
-                color: "#fff",
-                border: "none",
-                opacity: loadingTier !== null ? 0.7 : 1,
-              }}
-            >
-              {loadingTier === "open-bar" ? "..." : t.t2Btn}
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <Divider />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* IMAGE BREAK — flags / football                                      */}
-      {/* ------------------------------------------------------------------ */}
-      <div style={{ position: "relative", height: 500, overflow: "hidden" }}>
-        <Image
-          src="/lp-image-2.jpg"
-          alt="World Cup fans with flags"
-          fill
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "center 30%" }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(to bottom, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.45) 100%)",
-          }}
-        />
-      </div>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* EXPERIENCE PILLARS                                                  */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="experience" style={{ padding: "3.5rem 2rem" }}>
-        <p
-          style={{
-            ...body,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.35)",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {t.s1Label}
-        </p>
-        <h2
-          style={{
-            ...heading,
-            fontSize: 36,
-            color: "#f0ebe0",
-            margin: "0 0 2rem",
-          }}
-        >
-          {t.s1Title}
-        </h2>
-
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-            gap: 12,
-          }}
-        >
-          {[
-            { icon: <IconSliders />, title: t.p1Title, body: t.p1Body },
-            { icon: <IconGlass />, title: t.p2Title, body: t.p2Body },
-            { icon: <IconGlobe />, title: t.p3Title, body: t.p3Body },
-            { icon: <IconMic />, title: t.p4Title, body: t.p4Body },
-          ].map((pillar) => (
-            <div
-              key={pillar.title}
-              style={{
-                background: "rgba(255,255,255,0.04)",
-                border: "0.5px solid rgba(255,255,255,0.1)",
-                borderRadius: 8,
-                padding: "1.25rem",
-              }}
-            >
-              <div style={{ marginBottom: "0.75rem", lineHeight: 1 }}>
-                {pillar.icon}
-              </div>
-              <div
-                style={{
-                  ...body,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  marginBottom: "0.4rem",
-                }}
-              >
-                {pillar.title}
-              </div>
-              <div
-                style={{
-                  ...body,
-                  fontSize: 12,
-                  color: "rgba(240,235,224,0.5)",
-                  lineHeight: 1.5,
-                }}
-              >
-                {pillar.body}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* ROUTE                                                               */}
-      {/* ------------------------------------------------------------------ */}
-      <section
-        id="route"
-        style={{
-          padding: "3.5rem 2rem",
-          position: "relative",
-          overflow: "hidden",
-          minHeight: 450,
-        }}
-      >
-        <Image
-          src="/lp-image-1.jpg"
-          alt="Guadalajara city at night"
-          fill
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "40% center" }}
-        />
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background:
-              "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.65) 100%), " +
-              "linear-gradient(to right, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)",
-          }}
-        />
-
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <p
-            style={{
-              ...body,
-              fontSize: 11,
-              letterSpacing: 3,
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)",
-              marginBottom: "0.5rem",
-            }}
-          >
-            {t.s3Label}
-          </p>
-          <h2
-            style={{
-              ...heading,
-              fontSize: 36,
-              color: "#f0ebe0",
-              margin: "0 0 2rem",
-            }}
-          >
-            {t.s3Title}
-          </h2>
-
-          <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-            {[
-              { name: t.r1Name, desc: t.r1Desc },
-              { name: t.r2Name, desc: t.r2Desc },
-              { name: t.r3Name, desc: t.r3Desc },
-              { name: t.r4Name, desc: t.r4Desc },
-            ].map((stop, i, arr) => (
-              <div
-                key={stop.name}
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: 16,
-                  paddingBottom: "1.5rem",
-                  position: "relative",
-                }}
-              >
-                {/* Vertical line except for last item */}
-                {i < arr.length - 1 && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: 7,
-                      top: 20,
-                      width: 1,
-                      height: "calc(100% - 4px)",
-                      background: "rgba(255,107,43,0.25)",
-                    }}
-                  />
-                )}
-                {/* Dot */}
-                <div
-                  style={{
-                    width: 15,
-                    height: 15,
-                    borderRadius: "50%",
-                    border: "2px solid #FF6B2B",
-                    background: "#0a0a0a",
-                    flexShrink: 0,
-                    marginTop: 2,
-                  }}
-                />
-                <div>
-                  <div
-                    style={{
-                      ...body,
-                      fontWeight: 500,
-                      fontSize: 14,
-                      marginBottom: 3,
-                    }}
-                  >
-                    {stop.name}
-                  </div>
-                  <div
-                    style={{
-                      ...body,
-                      fontSize: 12,
-                      color: "rgba(240,235,224,0.45)",
-                    }}
-                  >
-                    {stop.desc}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        {/* end z-index wrapper */}
-      </section>
-
-      <Divider />
-
-      {/* ------------------------------------------------------------------ */}
-      {/* FAQ                                                                 */}
-      {/* ------------------------------------------------------------------ */}
-      <section id="faq" style={{ padding: "3.5rem 2rem" }}>
-        <p
-          style={{
-            ...body,
-            fontSize: 11,
-            letterSpacing: 3,
-            textTransform: "uppercase",
-            color: "rgba(255,255,255,0.35)",
-            marginBottom: "0.5rem",
-          }}
-        >
-          {t.s4Label}
-        </p>
-        <h2
-          style={{
-            ...heading,
-            fontSize: 36,
-            color: "#f0ebe0",
-            margin: "0 0 2rem",
-          }}
-        >
-          {t.s4Title}
-        </h2>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {t.faq.map((item) => (
-            <div
-              key={item.q}
-              style={{
-                borderTop: "0.5px solid rgba(255,255,255,0.08)",
-                padding: "1rem 0",
-              }}
-            >
-              <div
-                style={{
-                  ...body,
-                  fontSize: 14,
-                  fontWeight: 500,
-                  marginBottom: "0.4rem",
-                }}
-              >
-                {item.q}
-              </div>
-              <div
-                style={{
-                  ...body,
-                  fontSize: 13,
-                  color: "rgba(240,235,224,0.5)",
-                  lineHeight: 1.6,
-                }}
-              >
-                {item.a}
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ------------------------------------------------------------------ */}
-      {/* FOOTER                                                              */}
-      {/* ------------------------------------------------------------------ */}
-      {/* ------------------------------------------------------------------ */}
-      {/* TRUST BAR                                                           */}
-      {/* ------------------------------------------------------------------ */}
-      <div
-        style={{
-          borderTop: "0.5px solid rgba(255,255,255,0.1)",
-          padding: "1.5rem 2rem",
-          display: "flex",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: "2rem",
-        }}
-      >
-        {(lang === "en"
-          ? [
-              "✓ Secure checkout via MercadoPago",
-              "✓ Bilingual hosts · EN/ES",
-              "✓ Max 40 seats per night",
-              "✓ Free date change · 48hrs notice",
-            ]
-          : [
-              "✓ Pago seguro con MercadoPago",
-              "✓ Hosts bilingües · EN/ES",
-              "✓ Máx 40 lugares por noche",
-              "✓ Cambio de fecha gratis · 48hrs de aviso",
-            ]
-        ).map((item) => (
-          <span
-            key={item}
-            style={{
-              ...body,
-              fontSize: 12,
-              color: "rgba(255,255,255,0.5)",
-            }}
-          >
-            {item}
-          </span>
+          </Reveal>
         ))}
       </div>
 
-      <footer
-        style={{
-          padding: "2rem",
-          borderTop: "0.5px solid rgba(255,255,255,0.08)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "1rem",
-        }}
-      >
-        <div
-          style={{
-            ...heading,
-            fontSize: 18,
-            color: "#FF6B2B",
-            letterSpacing: 2,
-          }}
-        >
-          WORLD CUP NIGHTS
+      {/* ── EXPERIENCE SPLIT ── */}
+      <section id="experience" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "70vh" }}>
+        <div style={{ position: "relative", overflow: "hidden" }}>
+          <Image src="/lp-image-2.jpg" alt="World Cup fans" fill sizes="50vw" style={{ objectFit: "cover", transition: "transform 0.6s ease" }}
+            onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,92,0,0.15), transparent)" }} />
         </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "1.5rem",
-            fontSize: 12,
-            color: "rgba(255,255,255,0.35)",
-          }}
-        >
-          <span style={{ cursor: "pointer" }}>{t.footerInstagram}</span>
-          <a
-            href="https://wa.me/52XXXXXXXXXX"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "inherit", textDecoration: "none", cursor: "pointer" }}
-          >
-            {t.footerWhatsApp}
-          </a>
-          <span style={{ cursor: "pointer" }}>{t.footerContact}</span>
+        <div style={{ padding: "80px 64px", background: SURFACE, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.expTag}</div></Reveal>
+          <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(40px, 5vw, 68px)", lineHeight: 0.95, marginBottom: 32 }}>{t.expTitle[0]}<br />{t.expTitle[1]}</h2></Reveal>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+            {[[t.f1t, t.f1d], [t.f2t, t.f2d], [t.f3t, t.f3d], [t.f4t, t.f4d]].map(([title, desc], i) => (
+              <Reveal key={title} delay={(i + 2) * 100}>
+                <li style={{ display: "flex", gap: 16, padding: "18px 0", borderBottom: `1px solid ${BORDER}`, ...(i === 0 ? { borderTop: `1px solid ${BORDER}` } : {}) }}>
+                  <div style={{ width: 32, height: 32, borderRadius: 2, background: "rgba(255,92,0,0.1)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: ORANGE, fontSize: 12, fontWeight: 700 }}>
+                    {["40", "🥃", "EN", "🗺"][i]}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 500, marginBottom: 4 }}>{title}</div>
+                    <div style={{ fontSize: 13, color: MUTED, lineHeight: 1.6 }}>{desc}</div>
+                  </div>
+                </li>
+              </Reveal>
+            ))}
+          </ul>
         </div>
-        <div style={{ ...body, fontSize: 11, color: "rgba(255,255,255,0.2)" }}>
-          {t.footerCopy}
+      </section>
+
+      {/* ── ROUTE / CITY IMAGE ── */}
+      <div style={{ position: "relative", minHeight: 520, overflow: "hidden" }}>
+        <Image src="/lp-image-1.jpg" alt="Guadalajara" fill sizes="100vw" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.7) 50%, rgba(8,8,8,0.5) 100%)" }} />
+        <div style={{ position: "relative", zIndex: 2, padding: "80px 80px" }}>
+          <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, color: ORANGE, textTransform: "uppercase", marginBottom: 16 }}>{t.routeTag}</div></Reveal>
+          <Reveal delay={100}><h2 style={{ ...bebas, fontSize: 56, lineHeight: 0.95, marginBottom: 56 }}>{t.routeTitle[0]}<br />{t.routeTitle[1]}</h2></Reveal>
+          <div style={{ maxWidth: 420 }}>
+            {[[t.stop1t, t.stop1d], [t.stop2t, t.stop2d], [t.stop3t, t.stop3d], [t.stop4t, t.stop4d]].map(([title, desc], i, arr) => (
+              <Reveal key={title} delay={i * 100}>
+                <div style={{ display: "flex", gap: 24, alignItems: "flex-start", paddingBottom: i < arr.length - 1 ? 32 : 0 }}>
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", flexShrink: 0 }}>
+                    <div style={{ width: 20, height: 20, borderRadius: "50%", border: `2px solid ${ORANGE}`, background: i === arr.length - 1 ? ORANGE : "transparent", flexShrink: 0 }} />
+                    {i < arr.length - 1 && <div style={{ width: 1, flex: 1, background: "rgba(255,92,0,0.3)", minHeight: 40, marginTop: 4 }} />}
+                  </div>
+                  <div style={{ paddingTop: 1 }}>
+                    <div style={{ fontSize: 15, fontWeight: 500, marginBottom: 4 }}>{title}</div>
+                    <div style={{ fontSize: 13, color: MUTED, lineHeight: 1.6 }}>{desc}</div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
+      </div>
+
+      {/* ── DATES ── */}
+      <section id="dates" style={{ padding: "100px 48px", background: SURFACE }}>
+        <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.datesTag}</div></Reveal>
+        <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.datesTitle[0]}<br />{t.datesTitle[1]}</h2></Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 2 }}>
+          {DATES.map((d, i) => {
+            const dateStr = `${t.dateMonth} ${d}`;
+            const isSelected = selectedDate === dateStr;
+            return (
+              <Reveal key={d} delay={i * 30}>
+                <div onClick={() => selectDate(d)} style={{
+                  background: isSelected ? "rgba(255,92,0,0.06)" : BG,
+                  border: `2px solid ${isSelected ? ORANGE : "transparent"}`,
+                  padding: "20px 16px", textAlign: "center", cursor: "pointer",
+                  transition: "background 0.2s, transform 0.2s",
+                  position: "relative",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.background = isSelected ? "rgba(255,92,0,0.06)" : SURFACE2; e.currentTarget.style.transform = "translateY(-3px)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = isSelected ? "rgba(255,92,0,0.06)" : BG; e.currentTarget.style.transform = "translateY(0)"; }}>
+                  {isSelected && (
+                    <div style={{ position: "absolute", top: 8, right: 8, width: 18, height: 18, background: ORANGE, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, color: "#000" }}>✓</div>
+                  )}
+                  <div style={{ ...bebas, fontSize: 44, color: isSelected ? ORANGE : TEXT, lineHeight: 1, marginBottom: 2, transition: "color 0.2s" }}>{String(d).padStart(2, "0")}</div>
+                  <div style={{ ...mono, fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: MUTED, marginBottom: 12 }}>{t.dateMonth}</div>
+                  <div>
+                    <span style={{ background: "rgba(255,92,0,0.12)", color: ORANGE, padding: "3px 8px", borderRadius: 2, fontSize: 9, letterSpacing: 1, fontFamily: "'Space Mono', monospace" }}>{t.dateSpots}</span>
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+        <Reveal delay={200}>
+          <p style={{ ...dm, marginTop: 24, fontSize: 12, color: MUTED, letterSpacing: 0.5 }}>{t.datesInfo}</p>
+        </Reveal>
+      </section>
+
+      {/* ── TICKETS ── */}
+      <section id="tickets" style={{ padding: "100px 48px" }}>
+        <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.ticketsTag}</div></Reveal>
+        <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.ticketsTitle[0]}<br />{t.ticketsTitle[1]}</h2></Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+
+          {/* Entry */}
+          <Reveal>
+            <div style={{ background: SURFACE, border: `1px solid ${BORDER}`, borderRadius: 4, padding: 40, transition: "transform 0.3s", cursor: "pointer" }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"} onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+              <div style={{ ...bebas, fontSize: 28, letterSpacing: 1, marginBottom: 6 }}>{t.entryName}</div>
+              <div style={{ ...dm, fontSize: 13, color: MUTED, marginBottom: 24 }}>{t.entrySub}</div>
+              <div style={{ marginBottom: 6 }}>
+                <span style={{ ...bebas, fontSize: 56, color: ORANGE }}>$35</span>
+                <span style={{ ...dm, fontSize: 13, color: MUTED, marginLeft: 8 }}>{t.entryMxn}</span>
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: "24px 0 16px" }}>
+                {t.entryF.map(f => (
+                  <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", fontSize: 14, color: "rgba(240,236,228,0.8)", borderBottom: `1px solid ${BORDER}` }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: ORANGE, flexShrink: 0 }} />{f}
+                  </li>
+                ))}
+              </ul>
+              <p style={{ ...dm, fontSize: 13, fontStyle: "italic", color: MUTED, marginBottom: 28 }}>{t.entryTagline}</p>
+              <button onClick={() => openModal("entry")} style={{
+                ...dm, width: "100%", padding: 16, background: "transparent",
+                border: `1px solid rgba(255,255,255,0.2)`, color: TEXT,
+                fontSize: 14, fontWeight: 500, cursor: "pointer", borderRadius: 2, transition: "all 0.2s",
+              }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.05)"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                {t.entryBtn}
+              </button>
+            </div>
+          </Reveal>
+
+          {/* Open Bar */}
+          <Reveal delay={100}>
+            <div style={{ background: "#1a0c00", border: `1px solid ${ORANGE}`, borderRadius: 4, padding: 40, position: "relative", transition: "transform 0.3s", cursor: "pointer" }}
+              onMouseEnter={e => e.currentTarget.style.transform = "translateY(-4px)"} onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+              <div style={{ position: "absolute", top: 20, right: 20, background: ORANGE, color: "#000", ...mono, fontSize: 9, letterSpacing: 2, padding: "5px 12px", borderRadius: 20, textTransform: "uppercase" }}>{t.mostPop}</div>
+              <div style={{ ...bebas, fontSize: 28, letterSpacing: 1, marginBottom: 6 }}>{t.obName}</div>
+              <div style={{ ...dm, fontSize: 13, color: MUTED, marginBottom: 24 }}>{t.obSub}</div>
+              <div style={{ marginBottom: 6 }}>
+                <span style={{ ...bebas, fontSize: 56, color: ORANGE }}>$55</span>
+                <span style={{ ...dm, fontSize: 13, color: MUTED, marginLeft: 8 }}>{t.obMxn}</span>
+              </div>
+              <ul style={{ listStyle: "none", padding: 0, margin: "24px 0 16px" }}>
+                {t.obF.map(f => (
+                  <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 0", fontSize: 14, color: "rgba(240,236,228,0.8)", borderBottom: `1px solid ${BORDER}` }}>
+                    <span style={{ width: 8, height: 8, borderRadius: "50%", background: ORANGE, flexShrink: 0 }} />{f}
+                  </li>
+                ))}
+              </ul>
+              <p style={{ ...dm, fontSize: 13, fontStyle: "italic", color: MUTED, marginBottom: 28 }}>{t.obTagline}</p>
+              <button onClick={() => openModal("open-bar")} style={{
+                ...dm, width: "100%", padding: 16, background: ORANGE,
+                border: "none", color: "#000", fontSize: 14, fontWeight: 500,
+                cursor: "pointer", borderRadius: 2, transition: "background 0.2s",
+              }}
+                onMouseEnter={e => e.currentTarget.style.background = "#ff7a2e"}
+                onMouseLeave={e => e.currentTarget.style.background = ORANGE}>
+                {t.obBtn}
+              </button>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section id="faq" style={{ padding: "100px 48px", background: SURFACE }}>
+        <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.faqTag}</div></Reveal>
+        <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.faqTitle}</h2></Reveal>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: BORDER }}>
+          {t.faqs.map((item, i) => (
+            <Reveal key={item.q} delay={i * 60}>
+              <div style={{ background: SURFACE, padding: "28px 36px", transition: "background 0.2s", cursor: "default" }}
+                onMouseEnter={e => e.currentTarget.style.background = SURFACE2} onMouseLeave={e => e.currentTarget.style.background = SURFACE}>
+                <div style={{ ...dm, fontSize: 14, fontWeight: 500, marginBottom: 10 }}>{item.q}</div>
+                <div style={{ ...dm, fontSize: 13, color: MUTED, lineHeight: 1.7 }}>{item.a}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <footer style={{ padding: "56px 48px", borderTop: `1px solid ${BORDER}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ ...bebas, fontSize: 28, letterSpacing: 3 }}>WORLD CUP <span style={{ color: ORANGE }}>NIGHTS</span></div>
+        <div style={{ display: "flex", gap: 28 }}>
+          {t.footerLinks.map((l) => (
+            <a key={l} href="#" style={{ ...dm, fontSize: 12, color: MUTED, textDecoration: "none", letterSpacing: 1, transition: "color 0.2s" }}
+              onMouseEnter={e => e.currentTarget.style.color = TEXT} onMouseLeave={e => e.currentTarget.style.color = MUTED}>{l}</a>
+          ))}
+        </div>
+        <div style={{ ...mono, fontSize: 10, color: MUTED }}>{t.footerCopy}</div>
       </footer>
+
+      {/* ── CHECKOUT MODAL ── */}
+      <CheckoutModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        selectedDate={selectedDate ?? ""}
+        initialType={modalInitialType}
+        lang={lang}
+      />
+
+      {/* ── KEYFRAMES ── */}
+      <style>{`
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+      `}</style>
     </div>
   );
 }
