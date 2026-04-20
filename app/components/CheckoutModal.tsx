@@ -166,7 +166,7 @@ export default function CheckoutModal({ isOpen, onClose, selectedDate, initialTy
       />
 
       {/* Modal */}
-      <div style={{
+      <div className="checkout-modal" style={{
         position: "fixed", top: "50%", left: "50%",
         transform: "translate(-50%, -50%)",
         zIndex: 501, width: "100%", maxWidth: 560,
@@ -320,6 +320,15 @@ export default function CheckoutModal({ isOpen, onClose, selectedDate, initialTy
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .checkout-modal {
+            width: 95% !important;
+            max-height: 88vh !important;
+            overflow-y: auto !important;
+          }
+        }
+      `}</style>
     </>
   );
 }

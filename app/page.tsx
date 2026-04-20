@@ -171,7 +171,7 @@ export default function Home() {
     <div style={{ background: BG, color: TEXT, fontFamily: "'DM Sans', sans-serif", minHeight: "100vh", overflowX: "hidden" }}>
 
       {/* ── NAV ── */}
-      <nav style={{
+      <nav className="nav" style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
         display: "flex", justifyContent: "space-between", alignItems: "center",
         padding: "20px 48px",
@@ -180,7 +180,7 @@ export default function Home() {
         transition: "background 0.3s, border 0.3s",
       }}>
         <div style={{ ...bebas, fontSize: 18, letterSpacing: 3 }}>WCN</div>
-        <div style={{ display: "flex", gap: 32, listStyle: "none" }}>
+        <div className="nav-links" style={{ display: "flex", gap: 32, listStyle: "none" }}>
           {[["experience", t.navExp], ["dates", t.navDates], ["tickets", t.navTickets], ["faq", t.navFaq]].map(([id, label]) => (
             <button key={id} onClick={() => scrollTo(id)} style={{ ...dm, background: "none", border: "none", color: MUTED, fontSize: 12, letterSpacing: "1.5px", textTransform: "uppercase", cursor: "pointer", transition: "color 0.2s" }}
               onMouseEnter={e => (e.currentTarget.style.color = TEXT)} onMouseLeave={e => (e.currentTarget.style.color = MUTED)}>
@@ -208,7 +208,7 @@ export default function Home() {
       </nav>
 
       {/* ── STICKY BAR ── */}
-      <div style={{
+      <div className="sticky-bar" style={{
         position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 300,
         background: "rgba(8,8,8,0.97)", borderTop: `1px solid ${BORDER}`,
         padding: "16px 48px", display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -216,18 +216,18 @@ export default function Home() {
         transition: "transform 0.4s cubic-bezier(0.16,1,0.3,1)",
         backdropFilter: "blur(20px)",
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+        <div className="sticky-info" style={{ display: "flex", alignItems: "center", gap: 24 }}>
           <div>
             <div style={{ ...mono, fontSize: 9, letterSpacing: 2, color: MUTED, textTransform: "uppercase", marginBottom: 4 }}>{t.stickyNight}</div>
             <div style={{ ...bebas, fontSize: 24, color: ORANGE }}>{stickyLabel}</div>
           </div>
-          <div style={{ width: 1, height: 40, background: BORDER }} />
-          <div>
+          <div className="sticky-divider" style={{ width: 1, height: 40, background: BORDER }} />
+          <div className="sticky-ticket-info">
             <div style={{ ...mono, fontSize: 9, letterSpacing: 2, color: MUTED, textTransform: "uppercase", marginBottom: 4 }}>{t.stickyTicket}</div>
             <div style={{ fontSize: 13, color: MUTED }}>{t.stickyNoTicket}</div>
           </div>
-          <div style={{ width: 1, height: 40, background: BORDER }} />
-          <button onClick={() => scrollTo("dates")} style={{ ...dm, background: "none", border: "none", color: MUTED, fontSize: 12, textDecoration: "underline", cursor: "pointer" }}>{t.stickyChange}</button>
+          <div className="sticky-divider" style={{ width: 1, height: 40, background: BORDER }} />
+          <button className="sticky-change" onClick={() => scrollTo("dates")} style={{ ...dm, background: "none", border: "none", color: MUTED, fontSize: 12, textDecoration: "underline", cursor: "pointer" }}>{t.stickyChange}</button>
         </div>
         <button onClick={() => openModal("entry")} style={{
           ...dm, background: ORANGE, color: "#000", border: "none",
@@ -237,7 +237,7 @@ export default function Home() {
       </div>
 
       {/* ── HERO ── */}
-      <section style={{ height: "100vh", position: "relative", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "80px 48px", overflow: "hidden" }}>
+      <section className="hero-section" style={{ height: "100vh", position: "relative", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "80px 48px", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
           <Image src="/bus-photo.png" alt="Party Bus" fill priority quality={90} sizes="100vw" style={{ objectFit: "cover", objectPosition: "center" }} />
         </div>
@@ -246,14 +246,14 @@ export default function Home() {
           <div style={{ ...mono, fontSize: 11, letterSpacing: 3, color: ORANGE, textTransform: "uppercase", marginBottom: 20, animation: "fadeUp 0.8s 0.2s both" }}>
             {t.heroTag}
           </div>
-          <h1 style={{ ...bebas, fontSize: "clamp(64px, 9vw, 130px)", lineHeight: 0.9, letterSpacing: -1, marginBottom: 36, animation: "fadeUp 0.9s 0.4s both" }}>
+          <h1 className="hero-title" style={{ ...bebas, fontSize: "clamp(64px, 9vw, 130px)", lineHeight: 0.9, letterSpacing: -1, marginBottom: 36, animation: "fadeUp 0.9s 0.4s both" }}>
             {t.heroTitle[0]}<br />
             <span style={{ color: ORANGE }}>{t.heroTitle[1]}</span><br />
             {t.heroTitle[2]}
           </h1>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", animation: "fadeUp 0.9s 0.7s both" }}>
+          <div className="hero-bottom" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", animation: "fadeUp 0.9s 0.7s both" }}>
             <p style={{ ...dm, fontSize: 15, color: "rgba(240,236,228,0.7)", maxWidth: 400, lineHeight: 1.8, margin: 0 }}>{t.heroDesc}</p>
-            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
+            <div className="hero-buttons" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 12 }}>
               <button onClick={() => scrollTo("dates")} style={{ ...dm, background: ORANGE, color: "#000", border: "none", padding: "16px 40px", fontSize: 14, fontWeight: 500, letterSpacing: 0.5, cursor: "pointer", borderRadius: 2, transition: "background 0.2s" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#ff7a2e"} onMouseLeave={e => e.currentTarget.style.background = ORANGE}>
                 {t.heroCta1}
@@ -274,7 +274,7 @@ export default function Home() {
       </section>
 
       {/* ── STATS ── */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
+      <div className="stats-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", borderTop: `1px solid ${BORDER}`, borderBottom: `1px solid ${BORDER}` }}>
         {[["15", t.stat1], ["40", t.stat2], ["3h", t.stat3], ["9PM", t.stat4]].map(([n, l], i) => (
           <Reveal key={l} delay={i * 100}>
             <div style={{ padding: "28px 40px", borderRight: i < 3 ? `1px solid ${BORDER}` : "none", transition: "background 0.3s" }}
@@ -287,7 +287,7 @@ export default function Home() {
       </div>
 
       {/* ── EXPERIENCE SPLIT ── */}
-      <section id="experience" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "70vh" }}>
+      <section id="experience" className="experience-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "70vh" }}>
         <div style={{ position: "relative", overflow: "hidden" }}>
           <Image src="/lp-image-2.jpg" alt="World Cup fans" fill sizes="50vw" style={{ objectFit: "cover", transition: "transform 0.6s ease" }}
             onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.03)")} onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")} />
@@ -318,9 +318,9 @@ export default function Home() {
       <div style={{ position: "relative", minHeight: 520, overflow: "hidden" }}>
         <Image src="/lp-image-1.jpg" alt="Guadalajara" fill sizes="100vw" style={{ objectFit: "cover", objectPosition: "center 30%" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.7) 50%, rgba(8,8,8,0.5) 100%)" }} />
-        <div style={{ position: "relative", zIndex: 2, padding: "80px 80px" }}>
+        <div className="route-content" style={{ position: "relative", zIndex: 2, padding: "80px 80px" }}>
           <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, color: ORANGE, textTransform: "uppercase", marginBottom: 16 }}>{t.routeTag}</div></Reveal>
-          <Reveal delay={100}><h2 style={{ ...bebas, fontSize: 56, lineHeight: 0.95, marginBottom: 56 }}>{t.routeTitle[0]}<br />{t.routeTitle[1]}</h2></Reveal>
+          <Reveal delay={100}><h2 className="route-title" style={{ ...bebas, fontSize: 56, lineHeight: 0.95, marginBottom: 56 }}>{t.routeTitle[0]}<br />{t.routeTitle[1]}</h2></Reveal>
           <div style={{ maxWidth: 420 }}>
             {[[t.stop1t, t.stop1d], [t.stop2t, t.stop2d], [t.stop3t, t.stop3d], [t.stop4t, t.stop4d]].map(([title, desc], i, arr) => (
               <Reveal key={title} delay={i * 100}>
@@ -341,10 +341,10 @@ export default function Home() {
       </div>
 
       {/* ── DATES ── */}
-      <section id="dates" style={{ padding: "100px 48px", background: SURFACE }}>
+      <section id="dates" className="dates-section" style={{ padding: "100px 48px", background: SURFACE }}>
         <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.datesTag}</div></Reveal>
         <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.datesTitle[0]}<br />{t.datesTitle[1]}</h2></Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 2 }}>
+        <div className="dates-grid" style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 2 }}>
           {DATES.map((d, i) => {
             const dateStr = `${t.dateMonth} ${d}`;
             const isSelected = selectedDate === dateStr;
@@ -378,10 +378,10 @@ export default function Home() {
       </section>
 
       {/* ── TICKETS ── */}
-      <section id="tickets" style={{ padding: "100px 48px" }}>
+      <section id="tickets" className="tickets-section" style={{ padding: "100px 48px" }}>
         <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.ticketsTag}</div></Reveal>
         <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.ticketsTitle[0]}<br />{t.ticketsTitle[1]}</h2></Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
+        <div className="tickets-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 2 }}>
 
           {/* Entry */}
           <Reveal>
@@ -447,10 +447,10 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" style={{ padding: "100px 48px", background: SURFACE }}>
+      <section id="faq" className="faq-section" style={{ padding: "100px 48px", background: SURFACE }}>
         <Reveal><div style={{ ...mono, fontSize: 10, letterSpacing: 4, textTransform: "uppercase", color: ORANGE, marginBottom: 16 }}>{t.faqTag}</div></Reveal>
         <Reveal delay={100}><h2 style={{ ...bebas, fontSize: "clamp(44px, 6vw, 76px)", lineHeight: 0.95, marginBottom: 48 }}>{t.faqTitle}</h2></Reveal>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: BORDER }}>
+        <div className="faq-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 1, background: BORDER }}>
           {t.faqs.map((item, i) => (
             <Reveal key={item.q} delay={i * 60}>
               <div style={{ background: SURFACE, padding: "28px 36px", transition: "background 0.2s", cursor: "default" }}
@@ -464,7 +464,7 @@ export default function Home() {
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ padding: "56px 48px", borderTop: `1px solid ${BORDER}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <footer className="footer" style={{ padding: "56px 48px", borderTop: `1px solid ${BORDER}`, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <div style={{ ...bebas, fontSize: 28, letterSpacing: 3 }}>WORLD CUP <span style={{ color: ORANGE }}>NIGHTS</span></div>
         <div style={{ display: "flex", gap: 28 }}>
           {t.footerLinks.map((l) => (
@@ -491,6 +491,50 @@ export default function Home() {
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; }
         body { overflow-x: hidden; }
+
+        @media (max-width: 768px) {
+          /* Nav */
+          .nav { padding: 16px 20px !important; }
+          .nav-links { display: none !important; }
+
+          /* Hero */
+          .hero-section { padding: 20px 20px 60px !important; }
+          .hero-title { font-size: 56px !important; }
+          .hero-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 24px !important; }
+          .hero-buttons { align-items: stretch !important; width: 100% !important; flex-direction: column !important; }
+
+          /* Stats */
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+          /* Experience */
+          .experience-grid { grid-template-columns: 1fr !important; }
+          .experience-grid > div:first-child { min-height: 260px; }
+
+          /* Route */
+          .route-content { padding: 40px 20px !important; }
+          .route-title { font-size: 40px !important; }
+
+          /* Dates */
+          .dates-section { padding: 60px 20px !important; }
+          .dates-grid { grid-template-columns: repeat(3, 1fr) !important; }
+
+          /* Tickets */
+          .tickets-section { padding: 60px 20px !important; }
+          .tickets-grid { grid-template-columns: 1fr !important; }
+
+          /* FAQ */
+          .faq-section { padding: 60px 20px !important; }
+          .faq-grid { grid-template-columns: 1fr !important; }
+
+          /* Footer */
+          .footer { flex-direction: column !important; gap: 24px !important; padding: 40px 20px !important; text-align: center; }
+
+          /* Sticky bar */
+          .sticky-bar { padding: 12px 20px !important; }
+          .sticky-divider { display: none !important; }
+          .sticky-ticket-info { display: none !important; }
+          .sticky-change { display: none !important; }
+        }
       `}</style>
     </div>
   );
