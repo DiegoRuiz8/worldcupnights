@@ -16,7 +16,7 @@ const DATES = [5, 6, 10, 11, 12, 13, 17, 18, 19, 20, 23, 24, 25, 26, 27];
 const T = {
   en: {
     navExp: "Experience", navDates: "Dates", navTickets: "Tickets", navFaq: "FAQ", navBook: "Book Now",
-    heroTag: "Guadalajara · June 2026 · FIFA World Cup",
+    heroTag: "Guadalajara · June 2026 · World Cup",
     heroTitle: ["The Night", "Guadalajara", "Won't Forget"],
     heroDesc: "A curated double-decker party bus through the city's best neighborhoods. 40 people. 15 match nights. One unforgettable experience.",
     heroCta1: "Choose Your Night →", heroCta2: "See What's Included",
@@ -59,7 +59,7 @@ const T = {
   },
   es: {
     navExp: "Experiencia", navDates: "Fechas", navTickets: "Boletos", navFaq: "FAQ", navBook: "Reservar",
-    heroTag: "Guadalajara · Junio 2026 · Copa del Mundo FIFA",
+    heroTag: "Guadalajara · Junio 2026 · Copa del Mundo",
     heroTitle: ["La Noche que", "Guadalajara", "No Olvidará"],
     heroDesc: "Un party bus de doble piso por los mejores rincones de la ciudad. 40 personas. 15 noches de partido. Una experiencia inolvidable.",
     heroCta1: "Elige Tu Noche →", heroCta2: "Ver Qué Incluye",
